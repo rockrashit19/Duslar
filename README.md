@@ -33,11 +33,9 @@ env.py подхватывает DATABASE_URL:
 - `export $(grep -v '^#' .env | xargs)`
 - `alembic history | tail -n 1`
 
-Один раз в начале:
-
-- Инициализация alembic `alembic init alembic`
-
 Исправить в проде:
 
 - main.py:
 - - allow_origins=origins or ["*"], #обязательно оставить только разрешенные домены
+
+Проверка фильтров событий: docs/filters.md
