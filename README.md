@@ -33,9 +33,23 @@ env.py подхватывает DATABASE_URL:
 - `export $(grep -v '^#' .env | xargs)`
 - `alembic history | tail -n 1`
 
+Получение токена:
+
+```bash
+export $(grep -v '^#' .env | xargs)
+INIT="$(python scripts/mock_init_data.py)"
+BODY="$(jq -n --arg v "$INIT" '{init_data:$v}')"
+TOKEN="$(curl -s -H 'Content-Type: application/json' --data "$BODY" \
+  http://127.0.0.1:8000/api/v1/auth/telegram/init | jq -r '.token')"
+```
+
 Исправить в проде:
 
 - main.py:
 - - allow_origins=origins or ["*"], #обязательно оставить только разрешенные домены
 
 Проверка фильтров событий: docs/filters.md
+
+```
+
+```

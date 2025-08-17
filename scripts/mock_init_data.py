@@ -29,5 +29,5 @@ def build_init_data(user: dict, auth_date: int) -> str:
 
 if __name__ == "__main__":
     now = int(time.time())
-    mock_user = {"id": 123456789, "username": "testuser", "first_name": "Test", "last_name": "User"}
+    mock_user = {"id": 123456788, "username": "testuser", "first_name": "Test", "last_name": "User"}
     print(build_init_data(mock_user, now))

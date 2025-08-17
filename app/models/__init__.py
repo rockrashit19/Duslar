@@ -1,3 +1,9 @@
-from app.models.user import User  # noqa: F401
-from app.models.event import Event # noqa: F401
-from app.models.event_participant import EventParticipant # noqa: F401
+from app.models.user import User
+from app.models.event import Event, Gender, EventStatus 
+from app.models.event_participant import EventParticipant, ParticipationStatus
+
+__all__ = [
+    "User",
+    "Event", "Gender", "EventStatus",
+    "EventParticipant", "ParticipationStatus",
+]

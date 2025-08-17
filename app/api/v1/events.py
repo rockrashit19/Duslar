@@ -2,17 +2,26 @@ from datetime import datetime, timezone
 from typing import Optional
 
 from fastapi import APIRouter, Depends, HTTPException, Query
-from sqlalchemy import select, func, literal, exists, and_
+from sqlalchemy import select, func, literal, exists, and_, or_, text
 from sqlalchemy.orm import Session
+from sqlalchemy.exc import IntegrityError
 
 from app.api.deps import get_db, get_current_user
-from app.models.event import Event, EventStatus
-from app.models.event_participant import EventParticipant, ParticipationStatus
-from app.models.user import User
-from app.schemas.events import EventCreate, EventCardOut, EventOut
-
-from sqlalchemy import text
-from sqlalchemy.exc import IntegrityError
+from app.models import (
+    User,
+    Event, 
+    EventStatus,
+    EventParticipant,
+    ParticipationStatus,
+)
+from app.schemas import (
+    EventCreate,
+    EventCardOut,
+    EventOut,
+    VisibilityUpdateIn,
+    VisibilityOut,
+    ParticipantOut,
+)
 
 router = APIRouter()
 
@@ -244,3 +253,93 @@ def leave_event(
     
     db.commit()    
     return {"event_id": event_id, "left": True}
+
+@router.post("/events/{event_id}/visibility", response_model=VisibilityOut)
+def set_visibility(
+    event_id: int, 
+    payload: VisibilityUpdateIn,
+    db: Session = Depends(get_db),
+    current: User = Depends(get_current_user),
+):
+    try:
+        with db.begin_nested():
+            _lock_event(db, event_id)
+            
+            ev = db.get(Event, event_id)
+            if not ev:
+                raise HTTPException(status_code=404, detail="event not found")
+            
+            ep = EventParticipant
+            rec = db.execute(
+                select(ep)
+                .where(and_(ep.event_id == event_id, ep.user_id == current.id))
+                .with_for_update()
+            ).scalar_one_or_none()
+            
+            if rec is None:
+                raise HTTPException(status_code=409, detail="not joined")
+            
+            if rec.status != ParticipationStatus.joined:
+                raise HTTPException(status_code=409, detail="not joined")
+            
+            if rec.is_visible != payload.is_visible:
+                rec.is_visible = payload.is_visible
+        
+        db.commit()
+    except:
+        db.rollback()
+        raise
+    
+    return VisibilityOut(
+        event_id=event_id,
+        user_id=current.id,
+        is_visible=rec.is_visible,
+        status=rec.status.value,
+    )
+
+@router.get("/events/{event_id}/participants", response_model=list[ParticipantOut])
+def list_participants(
+    event_id: int,
+    db: Session = Depends(get_db),
+    current: User = Depends(get_current_user),
+    limit: int = Query(50, ge=1, le=200),
+    offset: int = Query(0, ge=0),
+):
+    ev = db.get(Event, event_id)
+    if not ev:
+        raise HTTPException(status_code=404, detail="event not found")
+    
+    ep = EventParticipant
+    
+    stmt = (
+        select(
+            ep.user_id.label("id"),
+            User.username,
+            User.full_name, 
+            ep.is_visible,
+        )
+        .join(User, User.id == ep.user_id)
+        .where(
+            and_(
+                ep.event_id == event_id,
+                ep.status == ParticipationStatus.joined,
+                or_(ep.is_visible.is_(True), ep.user_id == current.id)
+            )
+        )
+        .order_by(ep.joined_at.asc(), ep.user_id.asc())
+        .limit(limit)
+        .offset(offset)
+    )
+    
+    rows = db.execute(stmt).all()
+    
+    result: list[ParticipantOut] = []
+    for r in rows:
+        is_visible = r.is_visible if r.id == current.id else True
+        result.append(ParticipantOut(
+            id=r.id, 
+            username=r.username, 
+            full_name=r.full_name, 
+            is_visible=is_visible
+        ))
+    return result
