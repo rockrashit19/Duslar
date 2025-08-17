@@ -11,7 +11,12 @@ class UserRole(str, enum.Enum):
     user = "user"
     organizer = "organizer"
     admin = "admin"
-    
+
+class UserGender(str, enum.Enum):
+    male = "male"
+    female = "female"
+    unknown = "unknown"
+
 class User(Base):
     __tablename__ = "users"
     
@@ -20,7 +25,11 @@ class User(Base):
     username: Mapped[Optional[str]] = mapped_column(Text, nullable=True)
     full_name: Mapped[str] = mapped_column(Text, nullable=False)
     city: Mapped[Optional[str]] = mapped_column(Text, nullable=True)
-    
+    gender: Mapped[UserGender] = mapped_column(
+        Enum(UserGender, name="user_gender"),
+        nullable=False,
+        default=UserGender.unknown
+    )
     role: Mapped[UserRole] = mapped_column(
         Enum(UserRole, name="user_role"), nullable=False, default=UserRole.user
     )

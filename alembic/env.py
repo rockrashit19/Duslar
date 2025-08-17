@@ -27,6 +27,10 @@ def _get_db_url() -> str:
         or os.getenv("DATABASE_URL") \
         or config.get_main_option("sqlalchemy.url") # type: ignore
 
+def include_object(obj, name, type_, reflected, compare_to):
+    if type_ == "index":
+        return False  # игнорировать индексы при --autogenerate
+    return True
 
 def run_migrations_offline() -> None:
     url = _get_db_url()

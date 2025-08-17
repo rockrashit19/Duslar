@@ -13,6 +13,8 @@ from app.models import (
     EventStatus,
     EventParticipant,
     ParticipationStatus,
+    Gender,
+    UserGender,
 )
 from app.schemas import (
     EventCreate,
@@ -45,6 +47,7 @@ def list_events(
     date_to: Optional[datetime] = Query(None, alias="to"),
     limit: int = Query(20, ge=1, le=100),
     offset: int = Query(0, ge=0),
+    gender: Optional[str] = Query(None, regex="^(male|female|all)$"),
 ):
     conds = []
     df = _norm(date_from)
@@ -60,6 +63,9 @@ def list_events(
         
     if df and dt and df > dt:
         raise HTTPException(status_code=400, detail="'from' must be <= 'to'")
+
+    if gender:
+        conds.append(Event.gender_restriction == gender)
 
     ep = EventParticipant
     count_subq = (
@@ -199,6 +205,12 @@ def join_event(
         
         if ev.max_participants is not None and joined_cnt >= ev.max_participants:
             raise HTTPException(status_code=409, detail="event is full")
+        
+        if ev.gender_restriction != Gender.all:
+            if current.gender == UserGender.unknown:
+                raise HTTPException(status_code=409, detail="set your gender first")
+            if ev.gender_restriction != current.gender.value:
+                raise HTTPException(status_code=403, detail="gender restriction")
         
         existing = db.execute(
             select(ep)

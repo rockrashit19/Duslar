@@ -10,6 +10,11 @@ from .participants import (
     ParticipantOut,
 )
 
+from .users import (
+    GenderUpdateIn,
+    UserGender,
+)
+
 __all__ = [
     "EventCreate",
     "EventCardOut",
@@ -17,4 +22,6 @@ __all__ = [
     "VisibilityUpdateIn",
     "VisibilityOut",
     "ParticipantOut",
+    "GenderUpdateIn",
+    "UserGender",
 ]

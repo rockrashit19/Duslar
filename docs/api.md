@@ -10,6 +10,8 @@ Body: `{"is_visible": true|false}`
 - Присоединиться к мероприятию (передать EVENT_ID=x)
 - Покинуть мероприятие (передать EVENT_ID=x)
 - Поменять видимость участия (false/true внутри ссылки)
+- Посмотреть свой пол
+- Поменять свой пол
 
 ```bash
 curl -s http://127.0.0.1:8000/api/v1/events   -H "Authorization: Bearer $TOKEN" | jq
@@ -20,6 +22,9 @@ curl -i -X POST "http://127.0.0.1:8000/api/v1/events/$EVENT_ID/leave" \
 curl -s -X POST "http://127.0.0.1:8000/api/v1/events/$EVENT_ID/visibility" \
   -H "Authorization: Bearer $TOKEN" -H "Content-Type: application/json" \
   --data '{"is_visible": false}' | jq
+curl -s http://127.0.0.1:8000/api/v1/me -H "Authorization: Bearer $TOKEN" | jq
+curl -s -X POST http://127.0.0.1:8000/api/v1/me/gender   -H "Authorization: Bearer $TOKEN" -H "Content-Type: application/json"   --data '{"gender":"male"}' | jq
+
 ```
 
 Негативные сценарии:
@@ -28,6 +33,7 @@ curl -s -X POST "http://127.0.0.1:8000/api/v1/events/$EVENT_ID/visibility" \
 - Неправильная дата (400)
 - Несущестующее событие (404)
 - Поменять видимость на событие, где мы не участвуем (409) (перед этим нужно сделать leave из события)
+- Ограничение по полу (403)
 
 ```bash
 curl -i http://127.0.0.1:8000/api/v1/events
@@ -38,4 +44,5 @@ curl -i -X POST "http://127.0.0.1:8000/api/v1/events/999999/visibility" \
 curl -i -X POST "http://127.0.0.1:8000/api/v1/events/$EVENT_ID/visibility" \
   -H "Authorization: Bearer $TOKEN" -H "Content-Type: application/json" \
   --data '{"is_visible": false}'
+curl -i -X POST "http://127.0.0.1:8000/api/v1/events/$EID_F/join" -H "Authorization: Bearer $TOKEN" -H "Content-Type: application/json" --data "{}"
 ```
