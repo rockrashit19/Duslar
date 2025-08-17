@@ -16,5 +16,5 @@ __all__ = [
     "EventOut",
     "VisibilityUpdateIn",
     "VisibilityOut",
-    "ParticipantsOut",
+    "ParticipantOut",
 ]
