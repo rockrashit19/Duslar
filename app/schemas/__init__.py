@@ -15,6 +15,10 @@ from .users import (
     UserGender,
 )
 
+from .history import (
+    PersonHistoryOut,
+)
+
 __all__ = [
     "EventCreate",
     "EventCardOut",
@@ -24,4 +28,5 @@ __all__ = [
     "ParticipantOut",
     "GenderUpdateIn",
     "UserGender",
+    "PersonHistoryOut",
 ]

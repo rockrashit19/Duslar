@@ -12,6 +12,9 @@ Body: `{"is_visible": true|false}`
 - Поменять видимость участия (false/true внутри ссылки)
 - Посмотреть свой пол
 - Поменять свой пол
+- Проверить с кем был на мероприятиях
+- Создать/обноить заметку
+- Получить заметку
 
 ```bash
 curl -s http://127.0.0.1:8000/api/v1/events   -H "Authorization: Bearer $TOKEN" | jq
@@ -24,7 +27,14 @@ curl -s -X POST "http://127.0.0.1:8000/api/v1/events/$EVENT_ID/visibility" \
   --data '{"is_visible": false}' | jq
 curl -s http://127.0.0.1:8000/api/v1/me -H "Authorization: Bearer $TOKEN" | jq
 curl -s -X POST http://127.0.0.1:8000/api/v1/me/gender   -H "Authorization: Bearer $TOKEN" -H "Content-Type: application/json"   --data '{"gender":"male"}' | jq
-
+curl -s http://127.0.0.1:8000/api/v1/history/people -H "Authorization: Bearer $TOKEN" | jq
+curl -s -X PUT "http://127.0.0.1:8000/api/v1/users/234567891/note" \
+  -H "Authorization: Bearer $TOKEN" -H "Content-Type: application/json" \
+  --data '{"text":"Высокий, в очках, общались про обучение"}' | jq
+curl -s "http://127.0.0.1:8000/api/v1/users/234567891/note" \
+  -H "Authorization: Bearer $TOKEN" | jq
+curl -i -X DELETE "http://127.0.0.1:8000/api/v1/users/234567891/note" \
+  -H "Authorization: Bearer $TOKEN"
 ```
 
 Негативные сценарии:
