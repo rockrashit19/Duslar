@@ -15,6 +15,7 @@ Body: `{"is_visible": true|false}`
 - Проверить с кем был на мероприятиях
 - Создать/обноить заметку
 - Получить заметку
+- Удалить заметку (вернет 204)
 
 ```bash
 curl -s http://127.0.0.1:8000/api/v1/events   -H "Authorization: Bearer $TOKEN" | jq
