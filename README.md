@@ -50,6 +50,15 @@ TOKEN="$(curl -s -H 'Content-Type: application/json' --data "$BODY" \
 
 Проверка фильтров событий: docs/filters.md
 
+.env (prod)
+
 ```
+STORAGE_BACKEND=s3
+S3_BUCKET=muslimevent-prod
+S3_REGION=ru-central1
+S3_ENDPOINT_URL=https://storage.yandexcloud.net
+S3_ACCESS_KEY_ID=***
+S3_SECRET_ACCESS_KEY=***
+S3_PUBLIC_BASE_URL=https://cdn.muslimevent.ru
 
 ```

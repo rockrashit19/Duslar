@@ -30,8 +30,12 @@ class Event(Base):
     date_time: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False)
     
     gender_restriction: Mapped[Gender] = mapped_column(
-        Enum(Gender, name="gender_restriction", nullable=False, default=Gender.all)
+        Enum(Gender, name="gender_restriction"),
+        nullable=False,
+        default=Gender.all,
     )
+    
+    
     max_participants: Mapped[int | None] = mapped_column(Integer, nullable=True)
     
     status: Mapped[EventStatus] = mapped_column(
@@ -39,5 +43,7 @@ class Event(Base):
     )
     
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now(), nullable=False)
+    
+    photo_url: Mapped[str | None] = mapped_column(Text, nullable=True)
     
     creator = relationship("User", lazy="joined")

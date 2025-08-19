@@ -16,6 +16,7 @@ class EventCreate(BaseModel):
     date_time: datetime
     gender_restriction: Gender = Gender.all
     max_participants: Optional[int] = None
+    photo_url: str | None = None
     
     @field_validator("title")
     @classmethod
@@ -34,6 +35,7 @@ class EventCardOut(BaseModel):
     creator_id: int | None
     participants_count: int
     is_user_joined: bool
+    photo_url: str | None = None
     
 class EventOut(BaseModel):
     id: int
@@ -48,3 +50,4 @@ class EventOut(BaseModel):
     creator_id: int | None
     participants_count: int
     is_user_joined: bool
+    photo_url: str | None = None

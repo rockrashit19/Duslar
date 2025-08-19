@@ -85,6 +85,7 @@ def list_events(
         select(
             Event.id, Event.title, Event.location, Event.city, Event.date_time,
             Event.gender_restriction, Event.creator_id,
+            Event.photo_url,
             count_subq.label("participants_count"),
             is_joined_subq.label("is_user_joined"),
         )
@@ -99,6 +100,7 @@ def list_events(
             id=r.id, title=r.title, location=r.location, city=r.city, date_time=r.date_time,
             gender_restriction=r.gender_restriction, creator_id=r.creator_id,
             participants_count=r.participants_count, is_user_joined=bool(r.is_user_joined),
+            photo_url=r.photo_url,
         )
         for r in rows
     ]
@@ -126,6 +128,7 @@ def get_event(
     stmt = select(
         Event.id, Event.title, Event.description, Event.location, Event.city, Event.date_time,
         Event.gender_restriction, Event.max_participants, Event.status, Event.creator_id,
+        Event.photo_url,
         count_subq.label("participants_count"),
         is_joined_subq.label("is_user_joined"),
     ).where(Event.id == event_id)
@@ -139,6 +142,7 @@ def get_event(
         date_time=row.date_time, gender_restriction=row.gender_restriction, max_participants=row.max_participants,
         status=row.status, creator_id=row.creator_id,
         participants_count=row.participants_count, is_user_joined=bool(row.is_user_joined),
+        photo_url=row.photo_url,
     )
 
 
@@ -156,6 +160,7 @@ def create_event(
         date_time=payload.date_time,
         gender_restriction=payload.gender_restriction,        
         max_participants=payload.max_participants,
+        photo_url=payload.photo_url,
         creator_id=current.id,
     )
     db.add(e)
@@ -179,6 +184,7 @@ def create_event(
         date_time=e.date_time, gender_restriction=e.gender_restriction, max_participants=e.max_participants,
         status=e.status, creator_id=e.creator_id,
         participants_count=participants_count, is_user_joined=bool(is_user_joined),
+        photo_url=e.photo_url,
     )
 
 @router.post("/events/{event_id}/join")
@@ -209,7 +215,7 @@ def join_event(
         if ev.gender_restriction != Gender.all:
             if current.gender == UserGender.unknown:
                 raise HTTPException(status_code=409, detail="set your gender first")
-            if ev.gender_restriction != current.gender.value:
+            if ev.gender_restriction.value != current.gender.value:
                 raise HTTPException(status_code=403, detail="gender restriction")
         
         existing = db.execute(
