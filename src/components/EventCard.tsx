@@ -1,4 +1,6 @@
 import { useNavigate } from "react-router-dom";
+import { fmtDt, genderLabel } from "../lib/format";
+
 type Props = {
   id: number;
   title: string;
@@ -8,10 +10,10 @@ type Props = {
   participants_count: number;
   is_user_joined: boolean;
   photo_url?: string | null;
+  gender_restriction: "male" | "female" | "all";
 };
 export default function EventCard(p: Props) {
   const nav = useNavigate();
-  const dt = new Date(p.date_time).toLocaleString();
   return (
     <div
       onClick={() => nav(`/events/${p.id}`)}
@@ -33,6 +35,11 @@ export default function EventCard(p: Props) {
           overflow: "hidden",
           borderRadius: 8,
           background: "#f3f3f3",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          fontSize: 12,
+          color: "#777",
         }}
       >
         {p.photo_url ? (
@@ -41,12 +48,26 @@ export default function EventCard(p: Props) {
             alt=""
             style={{ width: "100%", height: "100%", objectFit: "cover" }}
           />
-        ) : null}
+        ) : (
+          "нет фото"
+        )}
       </div>
       <div>
-        <div style={{ fontWeight: 600 }}>{p.title}</div>
+        <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+          <div style={{ fontWeight: 600, flex: 1 }}>{p.title}</div>
+          <span
+            style={{
+              fontSize: 11,
+              padding: "2px 6px",
+              border: "1px solid #ddd",
+              borderRadius: 8,
+            }}
+          >
+            {genderLabel(p.gender_restriction)}
+          </span>
+        </div>
         <div style={{ fontSize: 12, opacity: 0.7 }}>
-          {dt} • {p.city} • {p.location}
+          {fmtDt(p.date_time)} • {p.city} • {p.location}
         </div>
         <div style={{ fontSize: 12, marginTop: 6 }}>
           Участников: {p.participants_count}{" "}

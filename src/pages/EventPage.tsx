@@ -2,6 +2,9 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { api } from "../lib/api";
 import JoinButton from "../components/JoinButton";
+import VisibilityToggle from "../components/VisibilityToggle";
+import { fmtDt, genderLabel, statusLabel } from "../lib/format";
+import { useToast } from "../state/toast";
 
 type EventOut = {
   id: number;
@@ -10,9 +13,9 @@ type EventOut = {
   location: string;
   city: string;
   date_time: string;
-  gender_restriction: "Для мужчин" | "Для девушек" | "Для всех";
+  gender_restriction: "male" | "female" | "all";
   max_participants: number | null;
-  status: "Набор открыт" | "Набор завершен" | "Мероприятие прошло";
+  status: "open" | "closed" | "past";
   creator_id: number | null;
   participants_count: number;
   is_user_joined: boolean;
@@ -23,18 +26,34 @@ export default function EventPage() {
   const { id } = useParams();
   const [data, setData] = useState<EventOut | null>(null);
   const [err, setErr] = useState<string | null>(null);
+  const { show } = useToast();
+
   useEffect(() => {
     (async () => {
       try {
         const { data } = await api.get<EventOut>(`/events/${id}`);
         setData(data);
       } catch (e: any) {
-        setErr(e?.response?.data?.detail || "Ошибка загрузки");
+        const msg = e?.response?.data?.detail || "Ошибка загрузки";
+        setErr(msg);
+        show(msg, "error");
       }
     })();
-  }, [id]);
+  }, [id, show]);
+
   if (err) return <div style={{ padding: 16 }}>❌ {err}</div>;
   if (!data) return <div style={{ padding: 16 }}>Загрузка…</div>;
+
+  const label = statusLabel({
+    status: data.status,
+    participants_count: data.participants_count,
+    max_participants: data.max_participants,
+  });
+
+  const seatsText =
+    data.max_participants != null
+      ? `${data.participants_count}/${data.max_participants}`
+      : `${data.participants_count}`;
 
   const onChanged = (next: boolean) =>
     setData((d) =>
@@ -70,29 +89,70 @@ export default function EventPage() {
           />
         </div>
       ) : null}
-      <h3 style={{ marginTop: 0 }}>{data.title}</h3>
-      <div style={{ fontSize: 13, opacity: 0.7 }}>
-        {new Date(data.date_time).toLocaleString()} • {data.city} •{" "}
-        {data.location}
+
+      <div
+        style={{
+          display: "flex",
+          gap: 8,
+          alignItems: "center",
+          flexWrap: "wrap",
+        }}
+      >
+        <h3 style={{ margin: "0 8px 0 0" }}>{data.title}</h3>
+        <Badge>{genderLabel(data.gender_restriction)}</Badge>
+        <Badge>{label}</Badge>
       </div>
+
+      <div style={{ fontSize: 13, opacity: 0.7, marginTop: 6 }}>
+        {fmtDt(data.date_time)} • {data.city} • {data.location}
+      </div>
+
       <p style={{ whiteSpace: "pre-wrap" }}>
         {data.description || "Описание отсутствует"}
       </p>
 
-      <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+      <div
+        style={{
+          display: "flex",
+          alignItems: "center",
+          gap: 12,
+          flexWrap: "wrap",
+        }}
+      >
         <JoinButton
           eventId={data.id}
           joined={data.is_user_joined}
-          onChanged={onChanged}
+          onChanged={(next) => {
+            onChanged(next);
+          }}
         />
-        <div style={{ fontSize: 13, opacity: 0.8 }}>
-          Участников: {data.participants_count}
-        </div>
+        <div style={{ fontSize: 13, opacity: 0.8 }}>Места: {seatsText}</div>
+        <VisibilityToggle
+          eventId={data.id}
+          initial={true}
+          onChanged={() => {}}
+        />
       </div>
 
       <hr style={{ margin: "16px 0" }} />
       <Participants eventId={data.id} />
     </div>
+  );
+}
+
+function Badge({ children }: { children: React.ReactNode }) {
+  return (
+    <span
+      style={{
+        fontSize: 11,
+        padding: "2px 6px",
+        border: "1px solid #ddd",
+        borderRadius: 8,
+        background: "#fafafa",
+      }}
+    >
+      {children}
+    </span>
   );
 }
 
@@ -104,6 +164,8 @@ function Participants({ eventId }: { eventId: number }) {
     is_visible: boolean;
   }> | null>(null);
   const [err, setErr] = useState<string | null>(null);
+  const { show } = useToast();
+
   useEffect(() => {
     (async () => {
       try {
@@ -112,14 +174,17 @@ function Participants({ eventId }: { eventId: number }) {
         });
         setRows(data);
       } catch (e: any) {
-        setErr(e?.response?.data?.detail || "Ошибка загрузки участников");
+        const msg = e?.response?.data?.detail || "Ошибка загрузки участников";
+        setErr(msg);
+        show(msg, "error");
       }
     })();
-  }, [eventId]);
+  }, [eventId, show]);
+
   if (err) return <div>❌ {err}</div>;
   if (!rows) return <div>Загружаем участников…</div>;
   if (rows.length === 0)
-    return <div style={{ opacity: 0.7 }}>Скоро присоединятся другие люди!</div>;
+    return <div style={{ opacity: 0.7 }}>Пока вы один участник</div>;
   return (
     <ul style={{ paddingLeft: 18 }}>
       {rows.map((u) => (
