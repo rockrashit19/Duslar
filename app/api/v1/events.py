@@ -38,6 +38,11 @@ def _norm(dt: Optional[datetime]) -> Optional[datetime]:
         return None
     return dt if dt.tzinfo else dt.replace(tzinfo=timezone.utc)
 
+def _norm_city(s: Optional[str]) -> Optional[str]:
+    if not s:
+        return None
+    return " ".join(s.split())
+
 @router.get("/events", response_model=list[EventCardOut])
 def list_events(
     db: Session = Depends(get_db),
@@ -52,8 +57,9 @@ def list_events(
     conds = []
     df = _norm(date_from)
     dt = _norm(date_to)
-    if city:
-        conds.append(func.lower(Event.city) == func.lower(city))  
+    city_norm = _norm_city(city)
+    if city_norm:
+        conds.append(func.lower(func.trim(Event.city)) == city_norm.lower()) 
     if df:
         conds.append(Event.date_time >= df)
     else:
