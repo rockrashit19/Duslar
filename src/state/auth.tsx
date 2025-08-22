@@ -15,10 +15,12 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     (async () => {
       try {
-        const { data } = await api.post("/auth/telegram/init", {
-          init_data: getInitData(),
-        });
-        setToken(data.token);
+        if (!sessionStorage.getItem("token")) {
+          const { data } = await api.post("/auth/telegram/init", {
+            init_data: getInitData(),
+          });
+          setToken(data.token);
+        }
       } catch (e: any) {
         const msg = e?.response?.data?.detail || "Ошибка аутентификации";
         setError(msg);

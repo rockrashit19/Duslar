@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { api } from "../lib/api";
 import EventCard from "../components/EventCard";
 import FiltersBar from "../components/FiltersBar";
+import SkeletonCard from "../components/SkeletonCard";
 
 type EventCardOut = {
   id: number;
@@ -90,8 +91,14 @@ export default function EventsPage() {
           ❌ {err}
         </div>
       )}
-      {rows?.length === 0 && !loading && !err && (
-        <div style={{ opacity: 0.7 }}>Событий не найдено</div>
+      {rows?.length === 0 && loading && (
+        <>
+          <SkeletonCard />
+          <SkeletonCard />
+          <SkeletonCard />
+          <SkeletonCard />
+          <SkeletonCard />
+        </>
       )}
 
       {rows?.map((e) => (

@@ -4,15 +4,20 @@ import { BrowserRouter } from "react-router-dom";
 import App from "./App";
 import { AuthProvider } from "./state/auth";
 import { ToastProvider } from "./state/toast";
+import { ErrorBoundary } from "./state/ErrorBoundary";
+import OfflineBar from "./components/OfflineBar";
 
 createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
     <ToastProvider>
-      <AuthProvider>
-        <BrowserRouter>
-          <App />
-        </BrowserRouter>
-      </AuthProvider>
+      <ErrorBoundary>
+        <AuthProvider>
+          <BrowserRouter>
+            <OfflineBar />
+            <App />
+          </BrowserRouter>
+        </AuthProvider>
+      </ErrorBoundary>
     </ToastProvider>
   </React.StrictMode>
 );
