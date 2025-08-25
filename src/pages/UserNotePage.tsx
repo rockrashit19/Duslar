@@ -46,7 +46,7 @@ export default function UserNotePage() {
   };
 
   return (
-    <div style={{ padding: 16 }}>
+    <div className="app">
       <h3>Личная заметка</h3>
       <textarea
         value={text}

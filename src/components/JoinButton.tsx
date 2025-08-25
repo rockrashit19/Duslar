@@ -41,6 +41,7 @@ export default function JoinButton({
         background: joined ? "#eee" : "#2ea44f",
         color: joined ? "#111" : "#fff",
         border: "none",
+        width: "100%",
         minWidth: 120,
       }}
     >

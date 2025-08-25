@@ -49,7 +49,8 @@ export default function CreateEventPage() {
   };
 
   return (
-    <div style={{ padding: 16, display: "grid", gap: 8 }}>
+    // <div className="app" style={{ padding: 16, display: "grid", gap: 8 }}>
+    <div className="app">
       <h3>Создать событие</h3>
       <input
         placeholder="Название"

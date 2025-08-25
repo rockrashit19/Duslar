@@ -39,7 +39,7 @@ export default function HistoryPage() {
   if (rows.length === 0)
     return <div style={{ padding: 16, opacity: 0.7 }}>Пока здесь пусто</div>;
   return (
-    <div style={{ padding: 16 }}>
+    <div className="app">
       <h3>С кем встречались</h3>
       <ul style={{ paddingLeft: 18 }}>
         {rows.map((r) => (

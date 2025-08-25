@@ -65,7 +65,7 @@ export default function EventsPage() {
   }, [filters]);
 
   return (
-    <div style={{ padding: 16 }}>
+    <div className="app">
       <h3 style={{ margin: "0 0 12px" }}>События</h3>
       <FiltersBar
         initial={filters}

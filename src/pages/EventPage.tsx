@@ -70,7 +70,7 @@ export default function EventPage() {
     );
 
   return (
-    <div style={{ padding: 16 }}>
+    <div className="app">
       {data.photo_url ? (
         <div
           style={{
@@ -184,7 +184,9 @@ function Participants({ eventId }: { eventId: number }) {
   if (err) return <div>❌ {err}</div>;
   if (!rows) return <div>Загружаем участников…</div>;
   if (rows.length === 0)
-    return <div style={{ opacity: 0.7 }}>Пока вы один участник</div>;
+    return (
+      <div style={{ opacity: 0.7 }}>Вы можете стать первым участником!</div>
+    );
   return (
     <ul style={{ paddingLeft: 18 }}>
       {rows.map((u) => (

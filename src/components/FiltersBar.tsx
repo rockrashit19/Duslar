@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { dateStartZ, dateEndZ } from "../lib/format";
 
 type Props = {
   initial: {
@@ -7,7 +8,7 @@ type Props = {
     to?: string;
     gender?: "male" | "female" | "all";
   };
-  onApply: (v: {
+  onApply: (p: {
     city?: string;
     from?: string;
     to?: string;
@@ -15,42 +16,48 @@ type Props = {
   }) => void;
 };
 
-function normCity(s?: string) {
-  return s ? s.trim().replace(/\s+/g, " ") : undefined;
-}
-
 export default function FiltersBar({ initial, onApply }: Props) {
   const [city, setCity] = useState(initial?.city || "");
-  const [from, setFrom] = useState(
-    initial?.from ? initial!.from.slice(0, 16) : ""
+  const [gender, setGender] = useState<"male" | "female" | "all">(
+    initial?.gender ?? "all"
   );
-  const [to, setTo] = useState(initial?.to ? initial!.to.slice(0, 16) : "");
-  const [gender, setGender] = useState(initial?.gender || "all");
+
+  const [from, setFrom] = useState<string>(
+    initial?.from ? initial!.from.slice(0, 10) : ""
+  );
+  const [to, setTo] = useState<string>(
+    initial?.to ? initial!.to.slice(0, 10) : ""
+  );
+
+  const apply = () => {
+    onApply({
+      city: city.trim() || undefined,
+      gender,
+      from: from ? dateStartZ(from) : undefined,
+      to: to ? dateEndZ(to) : undefined,
+    });
+  };
+
+  const reset = () => {
+    setCity("");
+    setGender("all");
+    setFrom("");
+    setTo("");
+    onApply({});
+  };
 
   return (
-    <div style={{ display: "grid", gap: 8, marginBottom: 12 }}>
-      <div
-        style={{
-          display: "grid",
-          gridTemplateColumns: "1fr 1fr 1fr 1fr",
-          gap: 8,
-        }}
-      >
+    <details style={{ marginBottom: 12 }}>
+      <summary style={{ cursor: "pointer", marginBottom: 8 }}>Фильтры</summary>
+
+      <div style={{ display: "grid", gap: 8 }}>
         <input
           placeholder="Город"
+          inputMode="text"
           value={city}
           onChange={(e) => setCity(e.target.value)}
         />
-        <input
-          type="datetime-local"
-          value={from}
-          onChange={(e) => setFrom(e.target.value)}
-        />
-        <input
-          type="datetime-local"
-          value={to}
-          onChange={(e) => setTo(e.target.value)}
-        />
+
         <select
           value={gender}
           onChange={(e) => setGender(e.target.value as any)}
@@ -59,32 +66,30 @@ export default function FiltersBar({ initial, onApply }: Props) {
           <option value="male">М</option>
           <option value="female">Ж</option>
         </select>
+
+        <label style={{ display: "grid", gap: 4 }}>
+          <span style={{ fontSize: 12, opacity: 0.7 }}>Дата от</span>
+          <input
+            type="date"
+            value={from}
+            onChange={(e) => setFrom(e.target.value)}
+          />
+        </label>
+
+        <label style={{ display: "grid", gap: 4 }}>
+          <span style={{ fontSize: 12, opacity: 0.7 }}>Дата до</span>
+          <input
+            type="date"
+            value={to}
+            onChange={(e) => setTo(e.target.value)}
+          />
+        </label>
+
+        <div style={{ display: "flex", gap: 8 }}>
+          <button onClick={apply}>Применить</button>
+          <button onClick={reset}>Сброс</button>
+        </div>
       </div>
-      <div style={{ display: "flex", gap: 8 }}>
-        <button
-          onClick={() =>
-            onApply({
-              city: normCity(city),
-              from: from ? new Date(from).toISOString() : undefined,
-              to: to ? new Date(to).toISOString() : undefined,
-              gender,
-            })
-          }
-        >
-          Применить
-        </button>
-        <button
-          onClick={() => {
-            setCity("");
-            setFrom("");
-            setTo("");
-            setGender("all");
-            onApply({});
-          }}
-        >
-          Сброс
-        </button>
-      </div>
-    </div>
+    </details>
   );
 }
