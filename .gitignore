@@ -5,6 +5,6 @@ __pycache__
 .gitignore
 .env
 alembic/versions/__pycache__
-.env.example
 media/
 PRODA.md
+secret.py

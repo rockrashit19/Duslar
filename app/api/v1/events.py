@@ -220,7 +220,7 @@ def join_event(
         
         if ev.gender_restriction != Gender.all:
             if current.gender == UserGender.unknown:
-                raise HTTPException(status_code=409, detail="set your gender first")
+                raise HTTPException(status_code=409, detail="Заполните свой пол в профиле")
             if ev.gender_restriction.value != current.gender.value:
                 raise HTTPException(status_code=403, detail="gender restriction")
         
