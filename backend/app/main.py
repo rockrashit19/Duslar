@@ -27,40 +27,48 @@ app.add_middleware(
 def health():
     return {"status": "ok"}
 
+app.include_router(api_router, prefix="/api/v1")
+
 from fastapi import Request, HTTPException
 from urllib.parse import parse_qsl
-import logging, hmac, hashlib, time, json
-
-log = logging.getLogger("tg-auth-debug")
+import os, hmac, hashlib, time, json
 
 @app.post("/api/v1/auth/telegram/init")
 async def __debug_tg_init(req: Request):
     body = await req.json()
     init_data = body.get("init_data") or body.get("initData") or ""
-    log.info("init_data_len=%s head=%s", len(init_data), init_data[:80])
+    print("[tg-init] len(init_data)=", len(init_data), " head=", init_data[:120])
+
     if not init_data:
+        print("[tg-init] ERROR missing init_data")
         raise HTTPException(401, "missing init_data")
 
     pairs = dict(parse_qsl(init_data, keep_blank_values=True))
     sent_hash = pairs.pop("hash", "")
     dcs = "\n".join(f"{k}={pairs[k]}" for k in sorted(pairs))
-    secret = hashlib.sha256(os.environ["TELEGRAM_BOT_TOKEN"].encode()).digest()
+
+    token = os.environ.get("TELEGRAM_BOT_TOKEN", "")
+    print("[tg-init] token_tail=...", token[-6:])  # чтобы убедиться, что тот самый токен
+    secret = hashlib.sha256(token.encode()).digest()
     calc = hmac.new(secret, dcs.encode(), hashlib.sha256).hexdigest()
+
     if calc != sent_hash:
-        log.warning("bad_hash calc=%s sent=%s", calc[:12], sent_hash[:12])
+        print("[tg-init] ERROR bad_hash calc=", calc[:12], " sent=", sent_hash[:12])
+        print("[tg-init] dcs_head=", dcs[:160])
         raise HTTPException(401, "bad_hash")
 
-    skew = abs(int(time.time()) - int(pairs.get("auth_date", "0") or 0))
-    if skew > 86400:
-        log.warning("stale_init_data skew=%s", skew)
+    auth_date = int(pairs.get("auth_date", "0") or 0)
+    skew = abs(int(time.time()) - auth_date)
+    print("[tg-init] auth_date=", auth_date, " skew=", skew)
+    if skew > 86400:  # 24 часа
+        print("[tg-init] ERROR stale_init_data skew=", skew)
         raise HTTPException(401, "stale_init_data")
 
     try:
         user = json.loads(pairs.get("user", "{}"))
+        print("[tg-init] user_id=", user.get("id"))
     except Exception as e:
-        log.warning("bad_user_json %s", e)
+        print("[tg-init] ERROR bad_user_json:", e)
         raise HTTPException(401, "bad_user_json")
 
     return {"ok": True, "user_id": user.get("id")}
-
-app.include_router(api_router, prefix="/api/v1")
