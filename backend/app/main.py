@@ -49,7 +49,7 @@ async def __debug_tg_init(req: Request):
 
     token = os.environ.get("TELEGRAM_BOT_TOKEN", "")
     print("[tg-init] token_tail=...", token[-6:])  # чтобы убедиться, что тот самый токен
-    secret = hashlib.sha256(token.encode()).digest()
+    secret = hashlib.sha256(os.environ["TELEGRAM_BOT_TOKEN"].strip().encode()).digest()
     calc = hmac.new(secret, dcs.encode(), hashlib.sha256).hexdigest()
 
     if calc != sent_hash:
