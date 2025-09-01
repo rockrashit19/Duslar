@@ -27,8 +27,6 @@ app.add_middleware(
 def health():
     return {"status": "ok"}
 
-app.include_router(api_router, prefix="/api/v1")
-
 from fastapi import Request, HTTPException
 from urllib.parse import parse_qsl
 import logging, hmac, hashlib, time, json
@@ -64,3 +62,5 @@ async def __debug_tg_init(req: Request):
         raise HTTPException(401, "bad_user_json")
 
     return {"ok": True, "user_id": user.get("id")}
+
+app.include_router(api_router, prefix="/api/v1")
