@@ -9,6 +9,7 @@ class UserOut(BaseModel):
     full_name: str
     city: str | None = None
     role: str
+    avatar_url: str | None = None
     
 class TokenOut(BaseModel):
     token: str

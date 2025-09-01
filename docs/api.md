@@ -119,3 +119,10 @@ curl -s http://127.0.0.1:8000/api/v1/events/$EVENT_ID \
   -H "Authorization: Bearer $TOKEN" | jq '{id,title,photo_url}'
 
 ```
+
+# Добавить пользователя в ивент (вводим @tg.id и номер ивента)
+
+```bash
+eval "$(./scripts/add_user_and_join_event.sh firstlast1423 20)"
+echo "$USER_ID / $EID"
+```

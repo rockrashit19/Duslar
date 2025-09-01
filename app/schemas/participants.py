@@ -9,8 +9,3 @@ class VisibilityOut(BaseModel):
     is_visible: bool
     status: str
     
-class ParticipantOut(BaseModel):
-    id: int
-    username: str | None = None
-    full_name: str
-    is_visible: bool

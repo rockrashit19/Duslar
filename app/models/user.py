@@ -39,3 +39,5 @@ class User(Base):
     created_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True), server_default=func.now(), nullable=False,
     )
+    
+    avatar_url: Mapped[Optional[str]] = mapped_column(Text, nullable=True)

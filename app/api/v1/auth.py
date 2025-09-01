@@ -32,14 +32,17 @@ def telegram_init(payload: TelegramInintIn, db: Session = Depends(get_db)):
     first_name = user_data.get("first_name") or ""
     last_name = user_data.get("last_name") or ""
     full_name = (first_name + " " + last_name).strip() or username or str(tg_id)
+    photo_url = (user_data.get("photo_url") or "").strip() or None
     
     user = db.get(User, tg_id)
     if user is None:
-        user = User(id=tg_id, username=username, full_name=full_name, role=UserRole.user)
+        user = User(id=tg_id, username=username, full_name=full_name, role=UserRole.user, avatar_url=photo_url)
         db.add(user)
     else:
         user.username = username
         user.full_name = full_name
+        if photo_url and user.avatar_url != photo_url:  
+            user.avatar_url = photo_url
     
     db.commit(); db.refresh(user)
     
@@ -48,6 +51,6 @@ def telegram_init(payload: TelegramInintIn, db: Session = Depends(get_db)):
         token=token,
         user=UserOut(
             id=user.id, username=username, full_name=user.full_name,
-            city=user.city, role=user.role.value
+            city=user.city, role=user.role.value, avatar_url=user.avatar_url
         ),
     )

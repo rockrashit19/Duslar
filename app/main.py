@@ -17,10 +17,9 @@ if settings.frontend_url:
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=[str(settings.frontend_url)] if settings.frontend_url else [],
-    allow_origin_regex=r"^https?://(localhost|127\.0\.0\.1)(:\d+)?$",
+    allow_origins=[str(settings.frontend_url)],
     allow_credentials=True,
-    allow_methods=["*"],
+    allow_methods=["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
     allow_headers=["*"],
 )
 

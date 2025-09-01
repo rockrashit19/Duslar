@@ -1,10 +1,12 @@
 from datetime import datetime
 from pydantic import BaseModel
 
-class PersonHistoryOut(BaseModel):
+class PeopleHistoryItemOut(BaseModel):
     id: int
-    username: str | None = None
     full_name: str
+    username: str | None = None
+    city: str | None = None
+    avatar_url: str | None = None
     events_together: int
-    last_seen_at: datetime
+    last_seen_at: datetime | None = None
     

@@ -1,8 +1,17 @@
 from datetime import datetime
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, field_validator
 
 class NoteIn(BaseModel):
-    text: str = Field(min_length=1, max_length=1000)
+    text: str
+
+    @field_validator("text")
+    @classmethod
+    def not_blank(cls, v: str) -> str:
+        if not v or not v.strip():
+            raise ValueError("текст заметки пуст")
+        if len(v) > 80:
+            raise ValueError("слишком длинная заметка")
+        return v.strip()
 
 class NoteOut(BaseModel):
     target_user_id: int

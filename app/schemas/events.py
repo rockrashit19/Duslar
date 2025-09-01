@@ -17,14 +17,14 @@ class EventCreate(BaseModel):
     gender_restriction: Gender = Gender.all
     max_participants: Optional[int] = None
     photo_url: str | None = None
-    
+
     @field_validator("title")
     @classmethod
     def title_len(cls, v: str) -> str:
-        if len(v) > 120:
-            raise ValueError("Название должно быть меньше 120 символов")
+        if len(v) > 20:
+            raise ValueError("Название должно быть меньше 20 символов")
         return v
-    
+
 class EventCardOut(BaseModel):
     id: int
     title: str
@@ -36,7 +36,9 @@ class EventCardOut(BaseModel):
     participants_count: int
     is_user_joined: bool
     photo_url: str | None = None
-    
+    status: str
+    max_participants: int | None = None
+
 class EventOut(BaseModel):
     id: int
     title: str
@@ -51,3 +53,10 @@ class EventOut(BaseModel):
     participants_count: int
     is_user_joined: bool
     photo_url: str | None = None
+
+class ParticipantOut(BaseModel):
+    id: int
+    username: str | None = None
+    full_name: str
+    is_visible: bool
+    avatar_url: str | None = None

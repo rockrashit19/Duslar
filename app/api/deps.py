@@ -5,7 +5,7 @@ from jose import jwt, JWTError
 
 from app.db.session import SessionLocal
 from app.core.config import settings
-from app.models.user import User
+from app.models.user import User, UserRole
 
 def get_db():
     db = SessionLocal()
@@ -13,6 +13,13 @@ def get_db():
         yield db
     finally:
         db.close()
+
+def assert_can_manage_roles(current: User) -> None:
+    if current.role == UserRole.admin:
+        return
+    if current.id in settings.role_managers:
+        return
+    raise HTTPException(status_code=403, detail="forbidden")
 
 def get_current_user(
     authorization: Optional[str] = Header(default=None),

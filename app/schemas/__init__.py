@@ -2,12 +2,12 @@ from .events import (
     EventCreate,
     EventCardOut,
     EventOut,
+    ParticipantOut,
 )
 
 from .participants import (
     VisibilityUpdateIn,
     VisibilityOut,
-    ParticipantOut,
 )
 
 from .users import (
@@ -16,7 +16,7 @@ from .users import (
 )
 
 from .history import (
-    PersonHistoryOut,
+    PeopleHistoryItemOut,
 )
 
 __all__ = [

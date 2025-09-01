@@ -1,5 +1,5 @@
 from functools import lru_cache
-from pydantic import AnyUrl, SecretStr
+from pydantic import AnyUrl, SecretStr, field_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
 from typing import Literal
 
@@ -21,6 +21,17 @@ class Settings(BaseSettings):
     s3_secret_access_key: str | None = None
     s3_public_base_url: str | None = None
 
+    role_managers: list[int] = []
+
+    @field_validator("role_managers", mode="before")
+    @classmethod
+    def _parse_role_managers(cls, v):
+        if not v:
+            return []
+        if isinstance(v, str):
+            return [int(x.strip()) for x in v.split(",") if x.strip()]
+        return v
+    
     model_config = SettingsConfigDict(
         env_file=".env",
         env_file_encoding="utf-8",

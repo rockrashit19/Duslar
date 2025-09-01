@@ -2,9 +2,10 @@ from datetime import datetime, timezone
 from typing import Optional
 
 from fastapi import APIRouter, Depends, HTTPException, Query
-from sqlalchemy import select, func, literal, exists, and_, or_, text
+from sqlalchemy import select, func, literal, exists, and_, or_, text, case
 from sqlalchemy.orm import Session
 from sqlalchemy.exc import IntegrityError
+import re
 
 from app.api.deps import get_db, get_current_user
 from app.models import (
@@ -15,6 +16,7 @@ from app.models import (
     ParticipationStatus,
     Gender,
     UserGender,
+    UserRole
 )
 from app.schemas import (
     EventCreate,
@@ -43,6 +45,16 @@ def _norm_city(s: Optional[str]) -> Optional[str]:
         return None
     return " ".join(s.split())
 
+def _query_tokens(s: Optional[str]) -> list[str]:
+    if not s:
+        return []
+    term = " ".join(s.split())
+    return [t for t in term.split(" ") if t]
+
+def _like_token(t: str) -> str:
+    t = t.replace("\\", "\\\\").replace("%", "\\%").replace("_", "\\_")
+    return f"%{t}%"
+
 @router.get("/events", response_model=list[EventCardOut])
 def list_events(
     db: Session = Depends(get_db),
@@ -53,25 +65,30 @@ def list_events(
     limit: int = Query(20, ge=1, le=100),
     offset: int = Query(0, ge=0),
     gender: Optional[str] = Query(None, regex="^(male|female|all)$"),
+    q: Optional[str] = Query(None, min_length=1, max_length=120),
 ):
     conds = []
     df = _norm(date_from)
     dt = _norm(date_to)
     city_norm = _norm_city(city)
     if city_norm:
-        conds.append(func.lower(func.trim(Event.city)) == city_norm.lower()) 
+        conds.append(func.lower(func.trim(Event.city)) == city_norm.lower())
     if df:
         conds.append(Event.date_time >= df)
     else:
         conds.append(Event.date_time >= _now_utc())
     if dt:
         conds.append(Event.date_time <= dt)
-        
+
     if df and dt and df > dt:
         raise HTTPException(status_code=400, detail="'from' must be <= 'to'")
 
     if gender:
         conds.append(Event.gender_restriction == gender)
+        
+    tokens = _query_tokens(q)
+    for t in tokens:
+        conds.append(Event.title.ilike(_like_token(t), escape="\\"))
 
     ep = EventParticipant
     count_subq = (
@@ -86,16 +103,22 @@ def list_events(
         .correlate(Event)
         .exists()
     )
+    
+    eff_status = case(
+        (Event.date_time < func.now(), literal("past")),
+        else_=Event.status
+    ).label("status")
 
     stmt = (
         select(
             Event.id, Event.title, Event.location, Event.city, Event.date_time,
             Event.gender_restriction, Event.creator_id,
             Event.photo_url,
+            eff_status, Event.max_participants,
             count_subq.label("participants_count"),
             is_joined_subq.label("is_user_joined"),
         )
-        .where(and_(*conds))  # если conds пуст — просто True
+        .where(and_(*conds))
         .order_by(Event.date_time.asc())
         .limit(limit)
         .offset(offset)
@@ -107,9 +130,11 @@ def list_events(
             gender_restriction=r.gender_restriction, creator_id=r.creator_id,
             participants_count=r.participants_count, is_user_joined=bool(r.is_user_joined),
             photo_url=r.photo_url,
+            status=r.status, max_participants=r.max_participants,
         )
         for r in rows
     ]
+
 
 
 @router.get("/events/{event_id}", response_model=EventOut)
@@ -130,13 +155,19 @@ def get_event(
         .where(and_(ep.event_id == Event.id, ep.user_id == current.id, ep.status == ParticipationStatus.joined))
         .correlate(Event).exists()
     )
+    
+    eff_status = case(
+        (Event.date_time < func.now(), literal("past")),
+        else_=Event.status
+    ).label("status")
 
     stmt = select(
         Event.id, Event.title, Event.description, Event.location, Event.city, Event.date_time,
-        Event.gender_restriction, Event.max_participants, Event.status, Event.creator_id,
+        Event.gender_restriction, Event.max_participants, Event.creator_id,
         Event.photo_url,
         count_subq.label("participants_count"),
         is_joined_subq.label("is_user_joined"),
+        eff_status,
     ).where(Event.id == event_id)
 
     row = db.execute(stmt).first()
@@ -158,6 +189,8 @@ def create_event(
     db: Session = Depends(get_db),
     current: User = Depends(get_current_user),
 ):
+    if current.role not in (UserRole.organizer, UserRole.admin):
+        raise HTTPException(status_code=403, detail="")
     e = Event(
         title=payload.title,
         description=payload.description,
@@ -222,7 +255,10 @@ def join_event(
             if current.gender == UserGender.unknown:
                 raise HTTPException(status_code=409, detail="Заполните свой пол в профиле")
             if ev.gender_restriction.value != current.gender.value:
-                raise HTTPException(status_code=403, detail="gender restriction")
+                if ev.gender_restriction.value == "female":
+                    raise HTTPException(status_code=403, detail="Мероприятие для девушек!")
+                else:
+                    raise HTTPException(status_code=403, detail="Мероприятие для мужчин!")
         
         existing = db.execute(
             select(ep)
@@ -341,13 +377,13 @@ def list_participants(
             User.username,
             User.full_name, 
             ep.is_visible,
+            User.avatar_url,
         )
         .join(User, User.id == ep.user_id)
         .where(
             and_(
                 ep.event_id == event_id,
-                ep.status == ParticipationStatus.joined,
-                or_(ep.is_visible.is_(True), ep.user_id == current.id)
+                ep.status == ParticipationStatus.joined
             )
         )
         .order_by(ep.joined_at.asc(), ep.user_id.asc())
@@ -359,11 +395,20 @@ def list_participants(
     
     result: list[ParticipantOut] = []
     for r in rows:
-        is_visible = r.is_visible if r.id == current.id else True
-        result.append(ParticipantOut(
-            id=r.id, 
-            username=r.username, 
-            full_name=r.full_name, 
-            is_visible=is_visible
-        ))
+        if not r.is_visible and r.id != current.id:
+            result.append(ParticipantOut(
+                id=r.id,
+                username=None,
+                full_name="Скрытый участник",
+                avatar_url=None,
+                is_visible=False,
+            ))
+        else:
+            result.append(ParticipantOut(
+                id=r.id,
+                username=r.username,
+                full_name=r.full_name,
+                avatar_url=r.avatar_url,
+                is_visible=r.is_visible,
+            ))
     return result
