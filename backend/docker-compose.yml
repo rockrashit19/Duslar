@@ -1,0 +1,23 @@
+version: "3.9"
+services:
+  db:
+    image: postgres:16
+    container_name: muslimevent_db
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: muslimevent
+    ports:
+      - "5432:5432"
+    volumes:
+      - db_data:/var/lib/postgresql/data
+  backend:
+    environment:
+      - STORAGE_BACKEND=local
+      - MEDIA_DIR=/app/media
+      - BACKEND_BASE_URL=http://127.0.0.1:8000
+    volumes:
+      - ./media:/app/media
+volumes:
+  db_data:

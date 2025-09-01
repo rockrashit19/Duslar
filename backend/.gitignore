@@ -1,1 +1,10 @@
+.venv
+__pycache__
+*.pyc
+.git
+.gitignore
 .env
+alembic/versions/__pycache__
+media/
+PRODA.md
+secret.py
