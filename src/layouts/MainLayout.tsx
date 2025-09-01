@@ -9,10 +9,13 @@ export default function MainLayout() {
   useEffect(() => {
     contentRef.current?.scrollTo({ top: 0, left: 0, behavior: "auto" });
   }, [pathname, search]);
+
   return (
     <>
-      <div ref={contentRef} className="app">
-        <Outlet />
+      <div ref={contentRef} className="viewport">
+        <div className="app">
+          <Outlet />
+        </div>
       </div>
       <BottomNav />
     </>

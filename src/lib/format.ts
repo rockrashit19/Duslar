@@ -15,7 +15,7 @@ export function toISOZ(d?: Date | null) {
   return s.toISOString().replace(/\.\d{3}Z$/, "Z");
 }
 export function genderLabel(g: "male" | "female" | "all") {
-  return g === "male" ? "м" : g === "female" ? "ж" : "все";
+  return g === "male" ? "мужчины" : g === "female" ? "девушки" : "все";
 }
 export function statusLabel(e: {
   status: "open" | "closed" | "past";
@@ -39,4 +39,16 @@ export function dateStartZ(dateYYYYMMDD: string) {
 export function dateEndZ(dateYYYYMMDD: string) {
   // "2025-08-25" -> "2025-08-25T23:59:59Z"
   return `${dateYYYYMMDD}T23:59:59Z`;
+}
+
+// Склеиваем локальные date + time в UTC-строку ISO8601 (с Z)
+export function combineDateTimeZ(date: string, time: string): string {
+  if (!date || !time) throw new Error("date/time required");
+  // date: "YYYY-MM-DD", time: "HH:MM"
+  const [y, m, d] = date.split("-").map(Number);
+  const [hh, mm] = time.split(":").map(Number);
+  // Создаём дату в ЛОКАЛЬНОЙ зоне пользователя:
+  const local = new Date(y, (m || 1) - 1, d || 1, hh || 0, mm || 0, 0, 0);
+  // toISOString() вернёт UTC с Z:
+  return local.toISOString();
 }

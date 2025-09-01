@@ -1,5 +1,6 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { dateStartZ, dateEndZ } from "../lib/format";
+import { normalizeCyrillic } from "../lib/validate";
 
 type Props = {
   initial: {
@@ -7,27 +8,36 @@ type Props = {
     from?: string;
     to?: string;
     gender?: "male" | "female" | "all";
+    q?: string;
   };
   onApply: (p: {
     city?: string;
     from?: string;
     to?: string;
     gender?: "male" | "female" | "all";
+    q?: string;
   }) => void;
+  onReset?: () => void;
 };
 
-export default function FiltersBar({ initial, onApply }: Props) {
+export default function FiltersBar({ initial, onApply, onReset }: Props) {
   const [city, setCity] = useState(initial?.city || "");
   const [gender, setGender] = useState<"male" | "female" | "all">(
     initial?.gender ?? "all"
   );
-
   const [from, setFrom] = useState<string>(
-    initial?.from ? initial!.from.slice(0, 10) : ""
+    initial?.from ? initial.from.slice(0, 10) : ""
   );
   const [to, setTo] = useState<string>(
-    initial?.to ? initial!.to.slice(0, 10) : ""
+    initial?.to ? initial.to.slice(0, 10) : ""
   );
+
+  useEffect(() => {
+    setCity(initial?.city || "");
+    setGender(initial?.gender ?? "all");
+    setFrom(initial?.from ? initial.from.slice(0, 10) : "");
+    setTo(initial?.to ? initial.to.slice(0, 10) : "");
+  }, [initial]);
 
   const apply = () => {
     onApply({
@@ -43,7 +53,8 @@ export default function FiltersBar({ initial, onApply }: Props) {
     setGender("all");
     setFrom("");
     setTo("");
-    onApply({});
+    if (onReset) onReset();
+    else onApply({});
   };
 
   return (
@@ -55,16 +66,16 @@ export default function FiltersBar({ initial, onApply }: Props) {
           placeholder="Город"
           inputMode="text"
           value={city}
-          onChange={(e) => setCity(e.target.value)}
+          onChange={(e) => setCity(normalizeCyrillic(e.target.value))}
         />
 
         <select
           value={gender}
           onChange={(e) => setGender(e.target.value as any)}
         >
-          <option value="all">Все</option>
-          <option value="male">М</option>
-          <option value="female">Ж</option>
+          <option value="all">все</option>
+          <option value="male">мужчины</option>
+          <option value="female">девушки</option>
         </select>
 
         <label style={{ display: "grid", gap: 4 }}>

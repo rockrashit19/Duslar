@@ -1,55 +1,108 @@
 import { useEffect, useState } from "react";
 import { api } from "../lib/api";
 import { useToast } from "../state/toast";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 type Row = {
   id: number;
   username?: string | null;
   full_name: string;
+  city?: string | null;
   events_together: number;
-  last_seen_at: string;
+  avatar_url?: string | null;
 };
 
 export default function HistoryPage() {
-  const [rows, setRows] = useState<Row[]>([]);
+  const [rows, setRows] = useState<Row[] | null>(null);
   const [err, setErr] = useState<string | null>(null);
-  const [loading, setLoading] = useState(false);
   const { show } = useToast();
+  const nav = useNavigate();
 
   useEffect(() => {
     (async () => {
       try {
         const { data } = await api.get<Row[]>("/history/people", {
-          params: { limit: 50 },
+          params: { limit: 100, offset: 0 },
         });
         setRows(data);
       } catch (e: any) {
         const msg = e?.response?.data?.detail || "Ошибка загрузки истории";
         setErr(msg);
         show(msg, "error");
-      } finally {
-        setLoading(false);
       }
     })();
   }, [show]);
 
-  if (err) return <div style={{ padding: 16 }}>❌ {err}</div>;
-  if (loading) return <div style={{ padding: 16 }}>Загрузка...</div>;
-  if (rows.length === 0)
-    return <div style={{ padding: 16, opacity: 0.7 }}>Пока здесь пусто</div>;
+  if (err)
+    return (
+      <div className="app" style={{ padding: 16 }}>
+        ❌ {err}
+      </div>
+    );
+  if (!rows)
+    return (
+      <div className="app" style={{ padding: 16 }}>
+        Загрузка…
+      </div>
+    );
+
   return (
-    <div className="app">
-      <h3>С кем встречались</h3>
-      <ul style={{ paddingLeft: 18 }}>
-        {rows.map((r) => (
-          <li key={r.id}>
-            <Link to={`/users/${r.id}/note`}>{r.full_name}</Link>
-            {r.username ? ` (@${r.username})` : ""} • вместе событий:{" "}
-            {r.events_together}
-          </li>
+    <div className="app history">
+      <h1 className="history__title">С кем встречались</h1>
+
+      <div className="history__list">
+        {rows.map((u) => (
+          <HistoryRow key={u.id} row={u} onOpen={() => nav(`/users/${u.id}`)} />
         ))}
-      </ul>
+      </div>
+    </div>
+  );
+}
+
+function HistoryRow({ row, onOpen }: { row: Row; onOpen: () => void }) {
+  const city = row.city?.trim() ? row.city : "не указан";
+  const initial =
+    (row.full_name || row.username || "?").trim().charAt(0).toUpperCase() ||
+    "?";
+
+  return (
+    <div className="hrow" onClick={onOpen} role="button">
+      {/* фото */}
+      <div className="hrow__avatar">
+        {row.avatar_url ? (
+          <img
+            src={row.avatar_url}
+            alt=""
+            width={69}
+            height={69}
+            style={{ objectFit: "cover", width: "100%", height: "100%" }}
+          />
+        ) : (
+          initial
+        )}
+      </div>
+
+      {/* текст (имя + мета) */}
+      <div>
+        <div className="hrow__name">{row.full_name}</div>
+        <div className="hrow__meta">
+          Ник в Telegram:{" "}
+          {row.username ? (
+            <a
+              href={`https://t.me/${row.username}`}
+              target="_blank"
+              rel="noreferrer"
+              onClick={(e) => e.stopPropagation()}
+            >
+              @{row.username}
+            </a>
+          ) : (
+            "не указан"
+          )}
+        </div>
+        <div className="hrow__meta">Город: {city}</div>
+        <div className="hrow__meta">Событий вместе: {row.events_together}</div>
+      </div>
     </div>
   );
 }

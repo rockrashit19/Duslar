@@ -37,13 +37,17 @@ export default function VisibilityToggle({
       onClick={onClick}
       disabled={loading}
       style={{
-        padding: "8px 12px",
-        borderRadius: 8,
-        border: "1px solid #ddd",
+        padding: val ? "10px 14px" : "10px 10px",
+        borderRadius: 20,
+        background: "#e5deccb3",
+        color: "#07253F82",
+        border: "none",
         width: "100%",
+        minWidth: 95,
+        height: 40,
       }}
     >
-      {loading ? "..." : val ? "Скрыть меня" : "Показывать меня"}
+      {loading ? "..." : val ? "Скрыть" : "Показать"}
     </button>
   );
 }

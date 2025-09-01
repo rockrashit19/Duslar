@@ -3,14 +3,47 @@ import { api, setToken } from "../lib/api";
 import { getInitData } from "../lib/telegram";
 import { useToast } from "./toast";
 
-type AuthCtx = { ready: boolean; error: string | null };
-const Ctx = createContext<AuthCtx>({ ready: false, error: null });
+export type Me = {
+  id: number;
+  username: string | null;
+  full_name: string;
+  city: string | null;
+  role: string;
+  gender: "male" | "female" | "unknown";
+  avatar_url?: string | null;
+};
+
+type AuthCtx = {
+  ready: boolean;
+  error: string | null;
+  me: Me | null;
+  refreshMe: () => Promise<void>;
+};
+
+const Ctx = createContext<AuthCtx>({
+  ready: false,
+  error: null,
+  me: null,
+  refreshMe: async () => {},
+});
+
 export const useAuth = () => useContext(Ctx);
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [ready, setReady] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [me, setMe] = useState<Me | null>(null);
   const { show } = useToast();
+
+  const refreshMe = async () => {
+    try {
+      const { data } = await api.get<Me>("/me");
+      setMe(data);
+    } catch (e: any) {
+      setMe(null);
+      throw e;
+    }
+  };
 
   useEffect(() => {
     (async () => {
@@ -21,6 +54,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
           });
           setToken(data.token);
         }
+        await refreshMe();
       } catch (e: any) {
         const msg = e?.response?.data?.detail || "Ошибка аутентификации";
         setError(msg);
@@ -30,5 +64,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       }
     })();
   }, [show]);
-  return <Ctx.Provider value={{ ready, error }}>{children}</Ctx.Provider>;
+
+  return (
+    <Ctx.Provider value={{ ready, error, me, refreshMe }}>
+      {children}
+    </Ctx.Provider>
+  );
 }

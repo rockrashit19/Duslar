@@ -1,56 +1,31 @@
+// BottomNav.tsx
 import { NavLink } from "react-router-dom";
-
-const itemStyle: React.CSSProperties = {
-  flex: 1,
-  textAlign: "center",
-  padding: "10px 6px",
-  minHeight: 44,
-  display: "flex",
-  flexDirection: "column",
-  alignItems: "center",
-  justifyContent: "center",
-  gap: 4,
-  fontSize: 12,
-};
+import addIcon from "../assets/add.png";
+import mosqueIcon from "../assets/mosque.png";
+import peopleIcon from "../assets/people.png";
+import personIcon from "../assets/person.png";
 
 export default function BottomNav() {
   return (
-    <nav
-      style={{
-        position: "fixed",
-        inset: "auto 0 0 0",
-        height: "calc(var(--nav-h) + env(safe-area-inset-bottom, 0px))",
-        paddingBottom: "env(safe-area-inset-bottom, 0px)",
-        borderTop: "1px solid rgba(0,0,0,.08)",
-        background: "var(--tg-bg, #fff)",
-        display: "flex",
-        zIndex: 1000,
-        width: "100%",
-      }}
-    >
-      <Tab to="/" label="События" />
-      <Tab to="/create" label="Создать" />
-      <Tab to="/history" label="История" />
+    <nav className="bottom-nav">
+      <Tab to="/" icon={mosqueIcon} />
+      <Tab to="/create" icon={addIcon} />
+      <Tab to="/history" icon={peopleIcon} />
+      <Tab to="/profile" icon={personIcon} />
     </nav>
   );
 }
 
-function Tab({ to, label }: { to: string; label: string }) {
+function Tab({ to, icon }: { to: string; icon: string }) {
   return (
     <NavLink
       to={to}
-      style={({ isActive }) => ({
-        ...itemStyle,
-        color: isActive ? "var(---tg-link, #2ea44f)" : "inherit",
-        fontWeight: isActive ? 600 : 500,
-        textDecoration: "none",
-      })}
+      className={({ isActive }) =>
+        "bottom-nav__link" + (isActive ? " active" : "")
+      }
       end={to === "/"}
     >
-      <span aria-hidden="true" style={{ lineHeight: 1.1 }}>
-        {to === "/" ? "🗓️" : to === "/create" ? "➕" : "👥"}
-      </span>
-      <span>{label}</span>
+      <img className="bottom-nav__icon" src={icon} alt="" />
     </NavLink>
   );
 }
