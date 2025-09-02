@@ -1,82 +1,54 @@
-# app/api/v1/admin.py
+# --- app/api/v1/admin_users.py ---
+
 from fastapi import APIRouter, Depends, HTTPException
 from pydantic import BaseModel, constr
-from sqlalchemy import text
 from sqlalchemy.orm import Session
+from sqlalchemy import func, update
 
-from app.core.deps import require_admin           
-from app.db.session import get_session            
+from app.core.security import require_admin
+from app.db.session import SessionLocal
+from app.models.user import User  # проверьте путь к модели
 
-router = APIRouter(prefix="/admin", tags=["admin"])
+router = APIRouter(prefix="/admin/users", tags=["admin:users"])
 
-ALLOWED_ROLES = {"user", "organizer", "admin"}      
+class RoleUpdate(BaseModel):
+    role: constr(strip_whitespace=True, min_length=3, max_length=32)
 
-class RoleIn(BaseModel):
-    role: constr(strip_whitespace=True, min_length=1)
+def get_session():
+    db = SessionLocal()
+    try:
+        yield db
+    finally:
+        db.close()
 
-@router.patch("/users/{user_id}/role")
-def set_user_role_by_id(
-    user_id: int,
-    payload: RoleIn,
-    _ = Depends(require_admin),
-    db: Session = Depends(get_session),
-):
-    role = payload.role.lower()
-    if role not in ALLOWED_ROLES:
-        raise HTTPException(400, f"Неправильная роль: {role} \n Доступные роли: user, organizer, admin")
+@router.patch("/by-username/{username}/role", dependencies=[Depends(require_admin)])
+def set_role_by_username(username: str, payload: RoleUpdate, db: Session = Depends(get_session)):
+    uname = username.lstrip("@").strip()
+    if not uname:
+        raise HTTPException(status_code=400, detail="empty username")
 
-    row = db.execute(
-        text("UPDATE users SET role=:role WHERE id=:uid RETURNING id, username"),
-        {"role": role, "uid": user_id},
-    ).first()
+    # 1) найдём пользователя (для ответа и валидаций)
+    user = (
+        db.query(User)
+        .filter(func.lower(User.username) == uname.lower())
+        .first()
+    )
+    if not user:
+        raise HTTPException(status_code=404, detail="User not found")
 
-    if not row:
-        raise HTTPException(404, "User not found")
+    # 2) жёсткий UPDATE — чтобы точно дошло до БД
+    stmt = (
+        update(User)
+        .where(func.lower(User.username) == uname.lower())
+        .values(role=payload.role)
+    )
+    res = db.execute(stmt)
+    db.commit()
 
-    return {"ok": True, "id": row.id, "username": row.username, "role": role}
+    if res.rowcount == 0:
+        # Такое бывает, если поле называется иначе (например, user_role)
+        raise HTTPException(status_code=500, detail="Update did not modify any row")
 
-@router.patch("/users/by-username/{username}/role")
-def set_user_role_by_username(
-    username: str,
-    payload: RoleIn,
-    _ = Depends(require_admin),
-    db: Session = Depends(get_session),
-):
-    """
-    Меняем роль по username (без @). Username сравниваем case-insensitive.
-    Если в БД колонка не `username`, а, например, `telegram_username`,
-    смени имя колонки в SQL ниже.
-    """
-    role = payload.role.lower()
-    if role not in ALLOWED_ROLES:
-        raise HTTPException(400, f"Role not allowed: {role}")
-
-    uname = username.lstrip("@")
-
-    row = db.execute(
-        text("""
-            UPDATE users
-            SET role = :role
-            WHERE lower(username) = lower(:uname)
-            RETURNING id, username
-        """),
-        {"role": role, "uname": uname},
-    ).first()
-
-    if not row:
-        # Если у тебя в таблице колонка называется НЕ `username`, раскомментируй этот блок и закомментируй UPDATE выше:
-        #
-        # row = db.execute(
-        #     text("""
-        #         UPDATE users
-        #         SET role = :role
-        #         WHERE lower(telegram_username) = lower(:uname)
-        #         RETURNING id, telegram_username AS username
-        #     """),
-        #     {"role": role, "uname": uname},
-        # ).first()
-        #
-        # if not row:
-        raise HTTPException(404, "User not found")
-
-    return {"ok": True, "id": row.id, "username": row.username, "role": role}
+    # перечитаем пользователя, чтобы вернуть актуальные данные
+    db.refresh(user)
+    return {"ok": True, "id": user.id, "username": user.username, "role": user.role}
