@@ -14,25 +14,17 @@ function setVar(k: string, v?: string) {
 }
 
 export function applyTelegramTheme() {
-  const tg = (window as any).Telegram?.WebApp;
-  if (!tg) return;
-  const p: TP = tg.themeParams || {};
-  setVar("--tg-bg", p.bg_color);
-  setVar("--tg-text", p.text_color);
-  setVar("--tg-hint", p.hint_color);
-  setVar("--tg-link", p.link_color);
-  setVar("--tg-button", p.button_color);
-  setVar("--tg-button-text", p.button_text_color);
-  setVar("--tg-secondary-bg", p.secondary_bg_color);
-  try {
-    tg.expand();
-  } catch {}
-  try {
-    tg.setHeaderColor("secondary_bg_color");
-  } catch {}
+  const tp = (window as any).Telegram?.WebApp?.themeParams;
+  if (!tp) return;
+  const root = document.documentElement;
+  if (tp.bg_color) root.style.setProperty("--tg-bg", tp.bg_color);
+  if (tp.text_color) root.style.setProperty("--tg-text", tp.text_color);
+  if (tp.link_color) root.style.setProperty("--tg-link", tp.link_color);
 }
+
 export function bindThemeListener() {
-  const tg = (window as any).Telegram?.WebApp;
-  if (!tg) return;
-  tg.onEvent("themeChanged", applyTelegramTheme);
+  const WA = (window as any).Telegram?.WebApp;
+  if (!WA) return;
+  WA.onEvent("themeChanged", applyTelegramTheme);
+  WA.ready();
 }
