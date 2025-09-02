@@ -4,10 +4,10 @@ from sqlalchemy import select
 from sqlalchemy.orm import Session
 import logging
 
-from app.core.deps import get_db            # у тебя есть app.core.deps
+from app.api.deps import get_db            # у тебя есть app.core.deps
 from app.core.config import settings
-from app.core.security import require_admin  # твой guard
-from app.db.models import User               # твоя модель
+from app.core.deps import require_admin  # твой guard
+from app.models import User               # твоя модель
 
 log = logging.getLogger("admin-users")
 router = APIRouter(prefix="/admin/users", tags=["admin"])
