@@ -105,6 +105,9 @@ h3 {
 }
 .muted {
   color: var(--text-soft);
+  margin-top: "1.5rem";
+  text-align: "center";
+  font-style: "italic";
 }
 
 .meta {

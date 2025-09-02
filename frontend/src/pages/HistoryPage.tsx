@@ -52,16 +52,7 @@ export default function HistoryPage() {
 
       <div className="history__list">
         {rows.length === 0 ? (
-          <div
-            style={{
-              marginTop: "1.5rem",
-              textAlign: "center",
-              color: "var(--muted)",
-              fontStyle: "italic",
-            }}
-          >
-            Здесь пока никого нет
-          </div>
+          <div className="muted">Здесь пока никого нет</div>
         ) : (
           rows.map((u) => (
             <HistoryRow
