@@ -9,8 +9,8 @@ import OfflineBar from "./components/OfflineBar";
 import "./styles/global.css";
 import { applyTelegramTheme, bindThemeListener } from "./lib/telegramTheme";
 
-applyTelegramTheme();
-bindThemeListener();
+// applyTelegramTheme();
+// bindThemeListener();
 
 createRoot(document.getElementById("root")!).render(
   <React.StrictMode>

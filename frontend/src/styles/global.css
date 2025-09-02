@@ -20,16 +20,13 @@ body {
 }
 
 :root {
-  --tg-bg: #f3efe6;
-  --tg-text: #0b2943;
-  --tg-link: #2ea44f;
-
-  --bg: var(--tg-bg, #f3efe6);
+  /* твои базовые цвета/шрифты */
+  --bg: #f3efe6;
   --bg-elev: #ffffff;
   --bg-soft: #efebdf;
-  --text: var(--tg-text, #0b2943);
+  --text: #0b2943;
   --text-soft: color-mix(in srgb, var(--text) 70%, transparent);
-  --primary: var(--tg-link, #99b9a4);
+  --primary: #99b9a4;
   --primary-weak: #99b9a480;
   --border: rgba(0, 0, 0, 0.08);
   --danger: #e5484d;
