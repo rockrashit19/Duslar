@@ -528,11 +528,6 @@ input[type="time"] {
   padding-right: 88px;
 }
 
-.field--icon > .input,
-.field--icon > .select {
-  padding-right: 36px;
-}
-
 /* ===== EventPage (карточка события, плашки) ===== */
 .event-wrap {
   margin: 0 20px;
