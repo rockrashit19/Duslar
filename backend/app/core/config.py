@@ -14,6 +14,9 @@ class Settings(BaseSettings):
     media_dir: str = "media"
     backend_base_url: str | None = None
     
+    jwt_issuer: str = "duslar_bot"
+    jwt_audience: str = "admin"
+    
     s3_bucket: str | None = None
     s3_region: str | None = None
     s3_endpoint_url: str | None = None
@@ -35,7 +38,7 @@ class Settings(BaseSettings):
     model_config = SettingsConfigDict(
         env_file=".env",
         env_file_encoding="utf-8",
-        env_prefix="",          # имена 1-в-1 как в .env
+        env_prefix="",          
         case_sensitive=False,
     )
 

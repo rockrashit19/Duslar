@@ -179,7 +179,7 @@ export default function ProfilePage() {
             {/* Имя + мета */}
             <div style={{ gridRow: 1, gridColumn: 2 }}>
               <h2 style={{ margin: "10px 0 3px 0" }}>{me.full_name}</h2>
-              <div className="meta">Ник в Telegram: {me.username || "—"}</div>
+              <div className="meta">@{me.username || "—"}</div>
               <div className="meta">Всего событий: {me.events_total ?? 0}</div>
               <div className="meta">Роль: {me.role || "user"}</div>
             </div>

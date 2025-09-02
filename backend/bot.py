@@ -25,12 +25,10 @@ log = logging.getLogger("duslar-bot")
 
 router = Router()
 
-# ─────────────────────────────────────────────────────────────────────────────
-# Конфигурация JWT для админов (должна совпадать с проверкой на бэкенде!)
 JWT_SECRET: str = settings.jwt_secret.get_secret_value()
 JWT_ALGO = "HS256"
-JWT_ISSUER = "duslar-bot"
-JWT_AUDIENCE = "admin"
+JWT_ISSUER = getattr(settings, "jwt_issuer", "duslar_bot")
+JWT_AUDIENCE =  getattr(settings, "jwt_audience", "admin")
 JWT_TTL_HOURS = 24 * 7  # 7 дней
 
 BACKEND_BASE = (settings.backend_base_url or "").rstrip("/")
