@@ -7,7 +7,7 @@ import { ToastProvider } from "./state/toast";
 import { ErrorBoundary } from "./state/ErrorBoundary";
 import OfflineBar from "./components/OfflineBar";
 import "./styles/global.css";
-import { applyTelegramTheme, bindThemeListener } from "./lib/telegramTheme";
+// import { applyTelegramTheme, bindThemeListener } from "./lib/telegramTheme";
 
 // applyTelegramTheme();
 // bindThemeListener();
