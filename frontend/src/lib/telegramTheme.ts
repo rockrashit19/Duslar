@@ -1,17 +1,17 @@
-type TP = Partial<{
-  bg_color: string;
-  text_color: string;
-  hint_color: string;
-  link_color: string;
-  button_color: string;
-  button_text_color: string;
-  secondary_bg_color: string;
-}>;
+// type TP = Partial<{
+//   bg_color: string;
+//   text_color: string;
+//   hint_color: string;
+//   link_color: string;
+//   button_color: string;
+//   button_text_color: string;
+//   secondary_bg_color: string;
+// }>;
 
-function setVar(k: string, v?: string) {
-  if (!v) return;
-  document.documentElement.style.setProperty(k, v);
-}
+// function setVar(k: string, v?: string) {
+//   if (!v) return;
+//   document.documentElement.style.setProperty(k, v);
+// }
 
 export function applyTelegramTheme() {
   const tp = (window as any).Telegram?.WebApp?.themeParams;
