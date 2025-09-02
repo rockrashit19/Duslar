@@ -51,9 +51,26 @@ export default function HistoryPage() {
       <h1 className="history__title">С кем встречались</h1>
 
       <div className="history__list">
-        {rows.map((u) => (
-          <HistoryRow key={u.id} row={u} onOpen={() => nav(`/users/${u.id}`)} />
-        ))}
+        {rows.length === 0 ? (
+          <div
+            style={{
+              marginTop: "1.5rem",
+              textAlign: "center",
+              color: "var(--muted)",
+              fontStyle: "italic",
+            }}
+          >
+            Здесь пока никого нет
+          </div>
+        ) : (
+          rows.map((u) => (
+            <HistoryRow
+              key={u.id}
+              row={u}
+              onOpen={() => nav(`/users/${u.id}`)}
+            />
+          ))
+        )}
       </div>
     </div>
   );

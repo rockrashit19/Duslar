@@ -228,7 +228,8 @@ export default function ProfilePage() {
                   style={{
                     fontSize: "0.85rem",
                     height: 28,
-                    paddingLeft: 8,
+                    padding: "0 28px 0 8px",
+                    lineHeight: "18px",
                   }}
                 >
                   <option value="unknown">Не указан</option>
