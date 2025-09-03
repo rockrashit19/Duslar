@@ -311,8 +311,8 @@ select {
   position: absolute;
   left: 0;
   right: 0;
-  top: -10px;
-  height: calc(100% + var(--safe-b) + 10px);
+  top: -1px;
+  height: calc(100% + var(--safe-b) + 1px);
   background: #89ac94;
   z-index: -1;
   border-top-left-radius: 8px;
