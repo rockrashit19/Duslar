@@ -247,6 +247,7 @@ select {
 .field--icon > .input,
 .field--icon > .select {
   padding-right: 36px;
+  height: 44px;
 }
 .field--icon > .icon {
   position: absolute;
@@ -627,7 +628,7 @@ input[type="time"] {
 /* Фильтры для контролов */
 .filter .input,
 .filter .select,
-.filter input[type="date"],
+.filter .inputinput no-native-picker .filter input[type="date"],
 .filter input[type="time"] {
   min-height: 40px;
   line-height: 40px;
