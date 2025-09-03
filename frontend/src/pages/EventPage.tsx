@@ -302,7 +302,31 @@ function Participants({
         const isMe = !!me && u.id === me.id;
         const meSuffix =
           isMe && u.is_visible === false ? " (вы скрыты)" : isMe ? " (вы)" : "";
-
+        if (u.is_visible === false && !isMe) {
+          return (
+            <div
+              key={u.id}
+              style={{
+                display: "grid",
+                gridTemplateColumns: "32px 1fr",
+                gap: "0.75rem",
+                alignItems: "center",
+                padding: 8,
+                borderRadius: 10,
+                cursor: "pointer",
+              }}
+            >
+              <Avatar src={u.avatar_url} />
+              <div>
+                <div style={{ fontWeight: 400, fontSize: "0.75rem" }}>
+                  {u.full_name} •{" "}
+                  {u.username ? `@${u.username}` : "ник не указан"}
+                  {meSuffix}
+                </div>
+              </div>
+            </div>
+          );
+        }
         return (
           <div
             key={u.id}
