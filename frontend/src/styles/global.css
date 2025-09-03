@@ -294,7 +294,7 @@ select {
   width: 100%;
 }
 .bottom-nav__link {
-  /* flex: 1;
+  flex: 1;
   min-height: 44px;
   display: flex;
   flex-direction: column;
@@ -302,7 +302,7 @@ select {
   justify-content: center;
   gap: 4px;
   font-size: 12px;
-  text-decoration: none; */
+  text-decoration: none;
   position: relative;
 }
 
