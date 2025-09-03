@@ -315,8 +315,8 @@ select {
   height: calc(100% + var(--safe-b) + 3px);
   background: #89ac94;
   z-index: -1;
-  border-top-left-radius: 8px;
-  border-top-right-radius: 8px;
+  border-top-left-radius: 3px;
+  border-top-right-radius: 3px;
 }
 
 .bottom-nav__icon {
