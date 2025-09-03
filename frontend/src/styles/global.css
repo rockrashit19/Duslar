@@ -291,7 +291,7 @@ select {
   background: #99b9a5;
   display: flex;
   z-index: 1000;
-  /* width: 100%; */
+  width: 100%;
 }
 .bottom-nav__link {
   /* flex: 1;
