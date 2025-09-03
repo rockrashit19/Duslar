@@ -7,6 +7,7 @@ body,
 #root {
   height: 100%;
   overflow-x: hidden;
+  touch-action: manipulation;
 }
 html {
   -webkit-text-size-adjust: 100%;
@@ -290,10 +291,10 @@ select {
   background: #99b9a5;
   display: flex;
   z-index: 1000;
-  width: 100%;
+  /* width: 100%; */
 }
 .bottom-nav__link {
-  flex: 1;
+  /* flex: 1;
   min-height: 44px;
   display: flex;
   flex-direction: column;
@@ -301,11 +302,23 @@ select {
   justify-content: center;
   gap: 4px;
   font-size: 12px;
-  text-decoration: none;
+  text-decoration: none; */
+  position: relative;
 }
-.bottom-nav__link.active {
+
+.bottom-nav__link.active::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: -10px;
+  height: calc(100% + var(--safe-b) + 10px);
   background: #89ac94;
+  z-index: -1;
+  border-top-left-radius: 8px;
+  border-top-right-radius: 8px;
 }
+
 .bottom-nav__icon {
   width: 30px;
   height: 30px;
@@ -601,4 +614,62 @@ input[type="time"] {
   margin-top: 12px;
   display: grid;
   gap: 8px;
+}
+
+.toast {
+  position: fixed;
+  left: 50%;
+  transform: translateX(-50%);
+  bottom: calc(80px + env(safe-area-inset-bottom, 0px));
+  z-index: 2000;
+}
+
+/* Фильтры для контролов */
+.filter .input,
+.filter .select,
+.filter input[type="date"],
+.filter input[type="time"] {
+  height: 40px;
+  line-height: 40px;
+  padding: 0 12px;
+  border-radius: 8px;
+  border: 1px solid transparent;
+  background: #efe9dd;
+  color: #0b2943;
+  font-size: 1rem;
+  box-sizing: border-box;
+}
+
+.filter input[type="date"],
+.filter input[type="time"] {
+  text-align: left;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+}
+
+.filter input[type="date"]::-webkit-datetime-edit,
+.filter input[type="time"]::-webkit-datetime-edit {
+  color: #0b2943;
+  padding: 0;
+}
+
+.filter input[type="date"]::-webkit-calendar-picker-indicator,
+.filter input[type="time"]::-webkit-clear-button,
+.filter input[type="time"]::-webkit-inner-spin-button {
+  display: none;
+  opacity: 0;
+}
+
+/* Специфичные стили для компонента FiltersBar */
+.filters-container {
+  display: grid;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.filters-container input,
+.filters-container select {
+  width: 100%;
+  box-sizing: border-box;
 }

@@ -52,3 +52,6 @@ export function combineDateTimeZ(date: string, time: string): string {
   // toISOString() вернёт UTC с Z:
   return local.toISOString();
 }
+
+export const clip17 = (s?: string) =>
+  !s ? "" : s.length > 17 ? s.slice(0, 17) + "..." : s;

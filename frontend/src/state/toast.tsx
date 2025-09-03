@@ -37,17 +37,7 @@ export function ToastProvider({ children }: { children: React.ReactNode }) {
   return (
     <ToastCtx.Provider value={{ show }}>
       {children}
-      <div
-        style={{
-          position: "fixed",
-          bottom: 80,
-          left: 0,
-          right: 0,
-          display: "grid",
-          justifyContent: "center",
-          pointerEvents: "none",
-        }}
-      >
+      <div className="toast">
         {toast && (
           <div
             key={toast.id}

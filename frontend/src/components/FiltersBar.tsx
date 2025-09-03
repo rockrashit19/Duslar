@@ -60,45 +60,46 @@ export default function FiltersBar({ initial, onApply, onReset }: Props) {
   return (
     <details style={{ marginBottom: 12 }}>
       <summary style={{ cursor: "pointer", marginBottom: 8 }}>Фильтры</summary>
-
-      <div style={{ display: "grid", gap: 8 }}>
-        <input
-          placeholder="Город"
-          inputMode="text"
-          value={city}
-          onChange={(e) => setCity(normalizeCyrillic(e.target.value))}
-        />
-
-        <select
-          value={gender}
-          onChange={(e) => setGender(e.target.value as any)}
-        >
-          <option value="all">все</option>
-          <option value="male">мужчины</option>
-          <option value="female">девушки</option>
-        </select>
-
-        <label style={{ display: "grid", gap: 4 }}>
-          <span style={{ fontSize: 12, opacity: 0.7 }}>Дата от</span>
+      <div className="filter">
+        <div className="filters-container">
           <input
-            type="date"
-            value={from}
-            onChange={(e) => setFrom(e.target.value)}
+            placeholder="Город"
+            inputMode="text"
+            value={city}
+            onChange={(e) => setCity(normalizeCyrillic(e.target.value))}
           />
-        </label>
 
-        <label style={{ display: "grid", gap: 4 }}>
-          <span style={{ fontSize: 12, opacity: 0.7 }}>Дата до</span>
-          <input
-            type="date"
-            value={to}
-            onChange={(e) => setTo(e.target.value)}
-          />
-        </label>
+          <select
+            value={gender}
+            onChange={(e) => setGender(e.target.value as any)}
+          >
+            <option value="all">все</option>
+            <option value="male">мужчины</option>
+            <option value="female">девушки</option>
+          </select>
 
-        <div style={{ display: "flex", gap: 8 }}>
-          <button onClick={apply}>Применить</button>
-          <button onClick={reset}>Сброс</button>
+          <label style={{ display: "grid", gap: 4 }}>
+            <span style={{ fontSize: 12, opacity: 0.7 }}>Дата от</span>
+            <input
+              type="date"
+              value={from}
+              onChange={(e) => setFrom(e.target.value)}
+            />
+          </label>
+
+          <label style={{ display: "grid", gap: 4 }}>
+            <span style={{ fontSize: 12, opacity: 0.7 }}>Дата до</span>
+            <input
+              type="date"
+              value={to}
+              onChange={(e) => setTo(e.target.value)}
+            />
+          </label>
+
+          <div style={{ display: "flex", gap: 8 }}>
+            <button onClick={apply}>Применить</button>
+            <button onClick={reset}>Сброс</button>
+          </div>
         </div>
       </div>
     </details>

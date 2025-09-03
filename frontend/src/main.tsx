@@ -6,6 +6,7 @@ import { AuthProvider } from "./state/auth";
 import { ToastProvider } from "./state/toast";
 import { ErrorBoundary } from "./state/ErrorBoundary";
 import OfflineBar from "./components/OfflineBar";
+import "./styles/reset.css";
 import "./styles/global.css";
 // import { applyTelegramTheme, bindThemeListener } from "./lib/telegramTheme";
 

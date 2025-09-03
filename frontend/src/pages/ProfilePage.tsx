@@ -6,6 +6,7 @@ import { useToast } from "../state/toast";
 import { normalizeCyrillic } from "../lib/validate";
 import searchIcon from "../assets/search.png";
 import polygonIcon from "../assets/polygon.png";
+import { clip17 } from "../lib/format";
 
 /** Лёгкий debounce без внешних зависимостей */
 function useDebounce<T extends (...args: any[]) => any>(fn: T, ms: number) {
@@ -179,7 +180,7 @@ export default function ProfilePage() {
             {/* Имя + мета */}
             <div style={{ gridRow: 1, gridColumn: 2 }}>
               <h2 style={{ margin: "10px 0 3px 0" }}>{me.full_name}</h2>
-              <div className="meta">@{me.username || "—"}</div>
+              <div className="meta">@{clip17(me.username || "—")}</div>
               <div className="meta">Всего событий: {me.events_total ?? 0}</div>
               <div className="meta">Роль: {me.role || "user"}</div>
             </div>
