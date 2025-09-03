@@ -97,8 +97,12 @@ export default function FiltersBar({ initial, onApply, onReset }: Props) {
           </label>
 
           <div style={{ display: "flex", gap: 8 }}>
-            <button onClick={apply}>Применить</button>
-            <button onClick={reset}>Сброс</button>
+            <button onClick={apply} style={{ color: "#0b2943" }}>
+              Применить
+            </button>
+            <button onClick={reset} style={{ color: "#0b2943" }}>
+              Сброс
+            </button>
           </div>
         </div>
       </div>
