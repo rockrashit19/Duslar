@@ -134,7 +134,7 @@ export default function EventCard({
           ) : (
             <Link
               to={`/events/${event.id}`}
-              style={{ textDecoration: "none", flex: 1 }}
+              style={{ textDecoration: "none", gridColumn: "span 2" }}
             >
               <button style={{ ...chipStyleSecondary, width: "100%" }}>
                 Подробнее

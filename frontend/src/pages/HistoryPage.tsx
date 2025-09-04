@@ -94,7 +94,6 @@ function HistoryRow({ row, onOpen }: { row: Row; onOpen: () => void }) {
       <div>
         <div className="hrow__name">{row.full_name}</div>
         <div className="hrow__meta">
-          Ник в Telegram:{" "}
           {row.username ? (
             <a
               href={`https://t.me/${row.username}`}

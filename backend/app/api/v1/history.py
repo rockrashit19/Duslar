@@ -50,6 +50,8 @@ def my_people_history(
                 ep1.status == ParticipationStatus.joined,
                 ep2.status == ParticipationStatus.joined,
                 Event.date_time < _now_utc(),  # только прошедшие
+                ep1.is_visible == True,
+                ep2.is_visible == True,
             )
         )
         .group_by(u2.id, u2.full_name, u2.username, u2.city, u2.avatar_url)
