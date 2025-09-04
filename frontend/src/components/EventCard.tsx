@@ -164,7 +164,7 @@ const chipStylePrimary: React.CSSProperties = {
   color: "var(--text)",
   fontWeight: 400,
   fontSize: "0.75rem",
-  lineHeight: "20px",
+  lineHeight: "15px",
   padding: "10px 14px",
 };
 
@@ -174,4 +174,6 @@ const chipStyleSecondary: React.CSSProperties = {
   color: "var(--text)",
   fontWeight: 400,
   fontSize: "0.75rem",
+  lineHeight: "15px",
+  padding: "10px 14px",
 };

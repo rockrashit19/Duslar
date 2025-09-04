@@ -309,6 +309,8 @@ def leave_event(
             return {"event_id": event_id, "left": True}
         
         if existing.status == ParticipationStatus.joined:
+            if ev.status == "past":
+                raise HTTPException(status_code=409, detail="Мероприятие уже прошло")
             existing.status = ParticipationStatus.left
     
     db.commit()    
