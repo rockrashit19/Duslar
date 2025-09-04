@@ -3,6 +3,9 @@ import { useNavigate } from "react-router-dom";
 import { api } from "../lib/api";
 import { useToast } from "../state/toast";
 import chevronIcon from "../assets/polygon.png";
+import calendarIcon from "../assets/date.png";
+import timeIcon from "../assets/time.png";
+import { buildLocalDateTime } from "../lib/format";
 
 type Role = "user" | "organizer" | "admin";
 
@@ -19,7 +22,6 @@ export default function CreateEventPage() {
       } catch (e: any) {
         const msg = e?.response?.data?.detail || "Ошибка загрузки профиля";
         setErr(msg);
-        // Безопасный дефолт — закрываем доступ
         setRole("user");
       }
     })();
@@ -161,7 +163,7 @@ function CreateEventForm() {
       );
       return;
     }
-    const local = new Date(`${form.date}T${form.time}:00`);
+    const local = buildLocalDateTime(form.date, form.time);
     if (isNaN(local.getTime())) {
       show("Некорректные дата или время", "error");
       return;
@@ -215,10 +217,10 @@ function CreateEventForm() {
             </span>
             <input
               className="input"
-              placeholder="не более 20 символов"
+              placeholder="не более 15 символов"
               value={form.title}
               onChange={(e) => onChange("title", e.target.value)}
-              maxLength={20}
+              maxLength={15}
             />
           </label>
 
@@ -297,6 +299,7 @@ function CreateEventForm() {
           </label>
 
           {/* Дата */}
+
           <label className="col" style={{ gap: 6, marginTop: 16 }}>
             <span
               className="meta"
@@ -304,12 +307,21 @@ function CreateEventForm() {
             >
               Дата:
             </span>
-            <input
-              className="input"
-              type="date"
-              value={form.date}
-              onChange={(e) => onChange("date", e.target.value)}
-            />
+            <div className="field--icon">
+              <input
+                className="input no-native-picker"
+                type="date"
+                value={form.date}
+                onChange={(e) => onChange("date", e.target.value)}
+                style={{
+                  borderRadius: 20,
+                  fontSize: "1rem",
+                  fontWeight: 400,
+                  paddingLeft: 15,
+                }}
+              />
+              <img className="icon" src={calendarIcon} alt="" />
+            </div>
           </label>
 
           {/* Время */}
@@ -320,13 +332,22 @@ function CreateEventForm() {
             >
               Время:
             </span>
-            <input
-              className="input"
-              type="time"
-              step={60}
-              value={form.time}
-              onChange={(e) => onChange("time", e.target.value)}
-            />
+            <div className="field--icon">
+              <input
+                className="input"
+                type="time"
+                step={60}
+                value={form.time}
+                onChange={(e) => onChange("time", e.target.value)}
+                style={{
+                  borderRadius: 20,
+                  fontSize: "1rem",
+                  fontWeight: 400,
+                  paddingLeft: 15,
+                }}
+              />
+              <img className="icon" src={timeIcon} alt="" />
+            </div>
           </label>
 
           {/* Для кого */}

@@ -45,12 +45,24 @@ class S3Storage(Storage):
     def save(self, stream: BinaryIO, filename: str, content_type: str | None) -> str:
         key = self.build_key(filename)
         ct = content_type or (mimetypes.guess_type(filename)[0] or "application/octet-stream")
-        self.s3.upload_fileobj(
-            Fileobj=stream,
-            Bucket=self.bucket,
-            Key=key,
-            ExtraArgs={"ContentType": ct, "ACL": "public-read"}
-        )
+        try:
+            try:
+                stream.seek(0)
+            except Exception:
+                pass
+
+            self.s3.upload_fileobj(
+                Fileobj=stream,
+                Bucket=self.bucket,
+                Key=key,
+                ExtraArgs={
+                    "ContentType": ct,
+                    "ACL": "public-read",
+                    "CacheControl": "public, max-age=31536000, immutable",
+                },
+            )
+        except Exception as e:
+            raise
         if self.public_base:
             return f"{self.public_base.rstrip('/')}/{key}"
         base = settings.s3_endpoint_url.rstrip("/") if settings.s3_endpoint_url else f"https://{self.bucket}.s3.{settings.s3_region}.amazonaws.com"

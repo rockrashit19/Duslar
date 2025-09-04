@@ -9,11 +9,6 @@ export function fmtDt(iso: string) {
     hour12: false,
   }).format(d);
 }
-export function toISOZ(d?: Date | null) {
-  if (!d) return undefined;
-  const s = new Date(d.getTime() - d.getTimezoneOffset() * 60000);
-  return s.toISOString().replace(/\.\d{3}Z$/, "Z");
-}
 export function genderLabel(g: "male" | "female" | "all") {
   return g === "male" ? "мужчины" : g === "female" ? "девушки" : "все";
 }
@@ -22,7 +17,7 @@ export function statusLabel(e: {
   participants_count: number;
   max_participants: number | null;
 }) {
-  if (e.status !== "open") return "уже прошло";
+  if (e.status !== "open") return "прошло";
   if (
     e.max_participants != null &&
     e.participants_count >= e.max_participants
@@ -41,17 +36,23 @@ export function dateEndZ(dateYYYYMMDD: string) {
   return `${dateYYYYMMDD}T23:59:59Z`;
 }
 
-// Склеиваем локальные date + time в UTC-строку ISO8601 (с Z)
-export function combineDateTimeZ(date: string, time: string): string {
-  if (!date || !time) throw new Error("date/time required");
-  // date: "YYYY-MM-DD", time: "HH:MM"
-  const [y, m, d] = date.split("-").map(Number);
-  const [hh, mm] = time.split(":").map(Number);
-  // Создаём дату в ЛОКАЛЬНОЙ зоне пользователя:
-  const local = new Date(y, (m || 1) - 1, d || 1, hh || 0, mm || 0, 0, 0);
-  // toISOString() вернёт UTC с Z:
-  return local.toISOString();
-}
-
 export const clip17 = (s?: string) =>
   !s ? "" : s.length > 17 ? s.slice(0, 17) + "..." : s;
+
+export function parseLocalDate(yyyy_mm_dd: string) {
+  const [y, m, d] = yyyy_mm_dd.split("-").map(Number);
+  return new Date(y, m - 1, d);
+}
+
+export function toInputDateValue(d: Date) {
+  const y = d.getFullYear();
+  const m = String(d.getMonth() + 1).padStart(2, "0");
+  const dd = String(d.getDate()).padStart(2, "0");
+  return `${y}-${m}-${dd}`;
+}
+
+export function buildLocalDateTime(dateStr: string, timeStr: string) {
+  const [y, m, d] = dateStr.split("-").map(Number);
+  const [hh, mm] = timeStr.split(":").map(Number);
+  return new Date(y, m - 1, d, hh, mm, 0, 0);
+}

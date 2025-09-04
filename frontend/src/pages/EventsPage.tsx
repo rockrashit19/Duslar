@@ -20,12 +20,11 @@ type Filters = {
   q?: string;
 };
 
-function isoDateStartZ(d: string) {
-  return new Date(`${d}T00:00:00`).toISOString();
+function dateStartZ(d: string) {
+  return `${d}T00:00:00.000Z`;
 }
-function isoDateEndZ(d: string) {
-  const dt = new Date(`${d}T23:59:59.999`);
-  return dt.toISOString();
+function dateEndZ(d: string) {
+  return `${d}T23:59:59.999Z`;
 }
 
 export default function EventsPage() {
@@ -100,10 +99,8 @@ export default function EventsPage() {
   useEffect(() => {
     setCity(filters.city || "");
     setGender(filters.gender ?? "all");
-    setFrom(
-      filters.from ? new Date(filters.from).toISOString().slice(0, 10) : ""
-    );
-    setTo(filters.to ? new Date(filters.to).toISOString().slice(0, 10) : "");
+    setFrom(filters.from ? filters.from.slice(0, 10) : "");
+    setTo(filters.to ? filters.to.slice(0, 10) : "");
   }, [filters]);
 
   const applyFilters = () => {
@@ -112,8 +109,8 @@ export default function EventsPage() {
       q: filters.q,
       city: city.trim() || undefined,
       gender,
-      from: from ? isoDateStartZ(from) : undefined,
-      to: to ? isoDateEndZ(to) : undefined,
+      from: from ? dateStartZ(from) : undefined,
+      to: to ? dateEndZ(to) : undefined,
     });
   };
   const resetFilters = () => {

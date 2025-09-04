@@ -1,4 +1,3 @@
-// src/components/EventCard.tsx
 import { useState } from "react";
 import type { EventCardOut } from "../types";
 import { Link } from "react-router-dom";
@@ -113,10 +112,10 @@ export default function EventCard({
             : "девушки"}
         </div>
 
-        {/* Чип-кнопки справа от текста (на одной строке, как в фигме) */}
         <div
           style={{
-            display: "flex",
+            display: "grid",
+            gridTemplateColumns: "1fr 1fr",
             gap: 8,
             marginTop: 10,
             alignItems: "center",
@@ -128,10 +127,7 @@ export default function EventCard({
               <button disabled={busy} onClick={doJoin} style={chipStylePrimary}>
                 Записаться
               </button>
-              <Link
-                to={`/events/${event.id}`}
-                style={{ textDecoration: "none" }}
-              >
+              <Link to={`/events/${event.id}`}>
                 <button style={chipStyleSecondary}>Подробнее</button>
               </Link>
             </>
@@ -168,6 +164,8 @@ const chipStylePrimary: React.CSSProperties = {
   color: "var(--text)",
   fontWeight: 400,
   fontSize: "0.75rem",
+  lineHeight: "20px",
+  padding: "10px 14px",
 };
 
 const chipStyleSecondary: React.CSSProperties = {
