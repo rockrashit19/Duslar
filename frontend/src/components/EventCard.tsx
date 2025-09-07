@@ -85,15 +85,15 @@ export default function EventCard({
 }
 
 // «Чипы» как в макете: зелёные полупрозрачные плашки с округлением
-const baseChip: React.CSSProperties = {
-  border: "none",
-  borderRadius: 20,
-  padding: "4px 10px",
-  fontSize: "0.75rem",
-  fontWeight: 500,
-  lineHeight: 1,
-  cursor: "pointer",
-};
+// const baseChip: React.CSSProperties = {
+//   border: "none",
+//   borderRadius: 20,
+//   padding: "4px 10px",
+//   fontSize: "0.75rem",
+//   fontWeight: 500,
+//   lineHeight: 1,
+//   cursor: "pointer",
+// };
 
 // const chipStylePrimary: React.CSSProperties = {
 //   ...baseChip,
