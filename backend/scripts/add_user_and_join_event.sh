@@ -21,8 +21,8 @@ USERNAME="$(echo -n "$USERNAME" | tr -d '[:space:]')"
 EID="$(echo -n "$EID" | tr -d '[:space:]')"
 
 # --- создаём пользователя при необходимости ---
-docker exec -i "$DB_CONTAINER" psql -U "$DB_USER" -d "$DB_NAME" -v uname="$USERNAME" <<'SQL'
-DO $$
+docker exec -i "$DB_CONTAINER" psql -U "$DB_USER" -d "$DB_NAME" -v uname="$USERNAME" <<SQL
+DO \$\$
 DECLARE
   existing_id BIGINT;
   new_id BIGINT;
@@ -47,7 +47,7 @@ BEGIN
   ELSE
     RAISE NOTICE 'user already exists username=% with id=%', :'uname', existing_id;
   END IF;
-END$$;
+END\$\$;
 SQL
 
 # --- получаем ID пользователя ---
@@ -61,9 +61,9 @@ if [[ -z "$USER_ID" ]]; then
 fi
 
 # --- добавляем участника события (joined, visible) ---
-docker exec -i "$DB_CONTAINER" psql -U "$DB_USER" -d "$DB_NAME" -v eid="$EID" -v uid="$USER_ID" <<'SQL'
+docker exec -i "$DB_CONTAINER" psql -U "$DB_USER" -d "$DB_NAME" -v eid="$EID" -v uid="$USER_ID" <<SQL
 -- проверим, что событие есть
-DO $$
+DO \$\$
 DECLARE
   exists_event INT;
 BEGIN
@@ -71,7 +71,7 @@ BEGIN
   IF exists_event IS NULL THEN
     RAISE EXCEPTION 'event % not found', :'eid';
   END IF;
-END$$;
+END\$\$;
 
 -- вставка/апдейт участника
 INSERT INTO event_participants (event_id, user_id, status, is_visible, joined_at)

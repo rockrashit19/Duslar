@@ -19,3 +19,6 @@ exceptiongroup==1.3.0
 gunicorn==23.0.0
 
 greenlet==3.2.4
+
+APScheduler==3.10.4
+pip-tools==7.4.1

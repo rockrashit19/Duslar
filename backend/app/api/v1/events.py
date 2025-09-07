@@ -26,6 +26,7 @@ from app.schemas import (
     VisibilityOut,
     ParticipantOut,
 )
+from app.services.maintenance import recompute_event_status
 
 router = APIRouter()
 
@@ -283,6 +284,7 @@ def join_event(
         except IntegrityError:
             pass
     db.commit()
+    recompute_event_status(event_id)
     return {"event_id": event_id, "joined": True}
 
 @router.post("/events/{event_id}/leave")
@@ -313,7 +315,8 @@ def leave_event(
                 raise HTTPException(status_code=409, detail="Мероприятие уже прошло")
             existing.status = ParticipationStatus.left
     
-    db.commit()    
+    db.commit()
+    recompute_event_status(event_id)    
     return {"event_id": event_id, "left": True}
 
 @router.post("/events/{event_id}/visibility", response_model=VisibilityOut)
