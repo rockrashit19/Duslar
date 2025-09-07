@@ -11,9 +11,15 @@ os.makedirs(settings.media_dir, exist_ok=True)
 
 app.mount("/media", StaticFiles(directory=settings.media_dir), name="media")
 
+allowed_origins: list[str] = []
+if settings.frontend_url:
+    allowed_origins.append(str(settings.frontend_url).rstrip("/"))
+    allowed_origins.append(str(settings.frontend_url))
+    allowed_origins.append("https://duslar.vercel.app")
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=[str(settings.frontend_url)],
+    allow_origins=allowed_origins,
     allow_credentials=True,
     allow_methods=["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
     allow_headers=["*"],
