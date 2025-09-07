@@ -123,81 +123,31 @@ export default function EventsPage() {
   };
 
   return (
-    <div className="app" style={{ paddingLeft: 20, paddingRight: 20 }}>
-      {/* строка поиска + кнопка фильтра */}
-      <div
-        style={{
-          marginTop: "2rem",
-          display: "grid",
-          gridTemplateColumns: "1fr auto",
-          alignItems: "center",
-          columnGap: 8,
-        }}
-      >
-        {/* ТОЛЬКО SearchBar: высота 40, r=10, без внешних рамок */}
-        <div style={{ width: "100%" }}>
-          <div
-            className="field--icon"
-            style={{
-              width: "100%",
+    <div className="app">
+      <div className="search-bar">
+        <div className="field--icon">
+          <input
+            className="input search-input"
+            value={q}
+            onChange={(e) => {
+              const val = e.target.value;
+              setQ(val);
+              if (val === "") setFilters((p) => ({ ...p, q: undefined }));
             }}
-          >
-            <input
-              className="input search-input"
-              value={q}
-              onChange={(e) => {
-                const val = e.target.value;
-                setQ(val);
-                if (val === "") setFilters((p) => ({ ...p, q: undefined }));
-              }}
-              placeholder="Найти мероприятие"
-              style={{
-                height: 40,
-                borderRadius: 10,
-                background: "#efe9dd",
-                border: "none",
-                boxShadow: "none",
-                paddingLeft: 15,
-                paddingRight: 36,
-              }}
-            />
-          </div>
+            placeholder="Найти мероприятие"
+          />
+          <img className="icon" src={searchIcon} alt="" />
         </div>
-
-        {/* Кнопка фильтров: без обводок, только PNG 30x15 */}
         <button
           aria-label="Фильтры"
           onClick={() => setShowFilters((v) => !v)}
-          style={{
-            width: 30,
-            height: 15,
-            padding: 0,
-            border: "none",
-            background: "transparent",
-            display: "grid",
-            placeItems: "center",
-          }}
+          className="filter-btn"
         >
-          <img
-            src={filterIcon}
-            alt=""
-            style={{ width: 30, height: 15, display: "block" }}
-          />
+          <img src={filterIcon} alt="" />
         </button>
       </div>
-
-      {/* ПАНЕЛЬ ФИЛЬТРОВ */}
       {showFilters && (
-        <div
-          style={{
-            marginTop: 8,
-            padding: 12,
-            borderRadius: "var(--r-md)",
-            background: "var(--bg-soft)",
-            border: "1px solid var(--border)",
-          }}
-        >
-          {/* Город */}
+        <div className="filters-panel">
           <RowLine
             label="Город:"
             control={
@@ -207,19 +157,11 @@ export default function EventsPage() {
                   value={city}
                   onChange={(e) => setCity(e.target.value)}
                   placeholder="Казань"
-                  style={{
-                    borderRadius: 20,
-                    fontSize: "1rem",
-                    fontWeight: 400,
-                    paddingLeft: 15,
-                  }}
                 />
                 <img className="icon" src={searchIcon} alt="" />
               </div>
             }
           />
-
-          {/* Для */}
           <RowLine
             label="Для:"
             control={
@@ -228,28 +170,15 @@ export default function EventsPage() {
                   className="select"
                   value={gender}
                   onChange={(e) => setGender(e.target.value as any)}
-                  style={{
-                    borderRadius: 20,
-                    fontSize: "1rem",
-                    fontWeight: 400,
-                    paddingLeft: 15,
-                  }}
                 >
                   <option value="all">все</option>
                   <option value="male">мужчины</option>
                   <option value="female">девушки</option>
                 </select>
-                <img
-                  className="icon"
-                  src={polygonIcon}
-                  alt=""
-                  style={{ width: 16, height: 7 }}
-                />
+                <img className="icon" src={polygonIcon} alt="" />
               </div>
             }
           />
-
-          {/* Дата от */}
           <RowLine
             label="Дата от:"
             control={
@@ -259,19 +188,11 @@ export default function EventsPage() {
                   type="date"
                   value={from}
                   onChange={(e) => setFrom(e.target.value)}
-                  style={{
-                    borderRadius: 20,
-                    fontSize: "1rem",
-                    fontWeight: 400,
-                    paddingLeft: 15,
-                  }}
                 />
                 <img className="icon" src={calendarIcon} alt="" />
               </div>
             }
           />
-
-          {/* Дата до */}
           <RowLine
             label="Дата до:"
             control={
@@ -281,74 +202,23 @@ export default function EventsPage() {
                   type="date"
                   value={to}
                   onChange={(e) => setTo(e.target.value)}
-                  style={{
-                    borderRadius: 20,
-                    fontSize: "1rem",
-                    fontWeight: 400,
-                    paddingLeft: 15,
-                  }}
                 />
                 <img className="icon" src={calendarIcon} alt="" />
               </div>
             }
           />
-
-          {/* Кнопки в одну строку, одинаковый фон 30%, r=20 */}
-          <div
-            style={{
-              display: "grid",
-              gridTemplateColumns: "1fr 1fr",
-              gap: 12,
-              marginTop: 8,
-            }}
-          >
-            <button
-              onClick={resetFilters}
-              style={{
-                height: 30,
-                borderRadius: 20,
-                border: "none",
-                background: "rgba(153,185,164,0.3)",
-                fontWeight: 400,
-                fontSize: "1rem",
-              }}
-            >
+          <div className="btn-grid">
+            <button onClick={resetFilters} className="btn btn--filter">
               Сбросить
             </button>
-            <button
-              onClick={applyFilters}
-              style={{
-                height: 30,
-                borderRadius: 20,
-                border: "none",
-                background: "rgba(153,185,164,0.3)",
-                fontWeight: 400,
-                fontSize: "1rem",
-              }}
-            >
+            <button onClick={applyFilters} className="btn btn--filter">
               Применить
             </button>
           </div>
         </div>
       )}
-
-      {/* ошибка */}
-      {err && (
-        <div
-          style={{
-            marginTop: 12,
-            padding: 12,
-            background: "#ffecec",
-            border: "1px solid #ffc0c0",
-            borderRadius: 8,
-          }}
-        >
-          ❌ {err}
-        </div>
-      )}
-
-      {/* список карточек */}
-      <div style={{ display: "grid", gap: 10, marginTop: 12 }}>
+      {err && <div className="error-message mt-3">❌ {err}</div>}
+      <div className="events-list">
         {rows?.map((e) => (
           <EventCard
             key={e.id}
@@ -364,9 +234,8 @@ export default function EventsPage() {
           <div className="muted">Ничего не найдено</div>
         )}
       </div>
-
       {!eof && (
-        <div style={{ marginTop: 12 }}>
+        <div className="mt-3">
           <button
             disabled={loading || eof}
             onClick={() => {
@@ -374,13 +243,7 @@ export default function EventsPage() {
               setOffset(next);
               load(false, next);
             }}
-            style={{
-              width: "100%",
-              height: 36,
-              borderRadius: 12,
-              border: "1px solid var(--border)",
-              background: "var(--bg-soft)",
-            }}
+            className="load-more-btn"
           >
             {loading ? "Загружаем..." : "Показать ещё"}
           </button>

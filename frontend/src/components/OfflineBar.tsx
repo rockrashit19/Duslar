@@ -14,20 +14,10 @@ export default function OfflineBar() {
   }, []);
   if (online) return null;
   return (
-    <div
-      style={{
-        position: "fixed",
-        top: 0,
-        left: 0,
-        right: 0,
-        padding: "8px 12px",
-        background: "#fff5c2",
-        borderBottom: "1px solid #f0d98a",
-        textAlign: "center",
-        zIndex: 1000,
-      }}
-    >
-      Нет соединения. Действия недоступны.
+    <div>
+      {!online && (
+        <div className="offline-bar">Нет соединения. Действия недоступны.</div>
+      )}
     </div>
   );
 }

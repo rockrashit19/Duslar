@@ -11,7 +11,8 @@ import UserProfilePage from "./pages/UserProfilePage";
 
 export default function App() {
   const { ready, error } = useAuth();
-  if (!ready) return <div style={{ padding: 160 }}>Загрузка...</div>;
+  // if (!ready) return <div style={{ padding: 160 }}>Загрузка...</div>;
+  if (!ready) return;
   if (error) return <div style={{ padding: 16 }}>❌ {error}</div>;
   return (
     <Routes>

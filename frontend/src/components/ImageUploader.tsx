@@ -36,19 +36,12 @@ export default function ImageUploader({
   };
 
   return (
-    <div style={{ display: "grid", gap: 8 }}>
+    <div className="image-uploader">
       <input type="file" accept="image/*" onChange={pick} disabled={busy} />
       {preview && (
-        <img
-          src={preview}
-          alt=""
-          style={{
-            width: "100%",
-            maxHeight: 180,
-            objectFit: "cover",
-            borderRadius: 8,
-          }}
-        />
+        <div className="preview-image">
+          <img src={preview} alt="" className="img-fit" />
+        </div>
       )}
     </div>
   );

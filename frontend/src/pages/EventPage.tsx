@@ -106,69 +106,26 @@ export default function EventPage() {
     );
 
   return (
-    <div className="app">
-      {data.photo_url ? (
-        <div className="event-hero" style={{ marginTop: "2rem" }}>
-          <img
-            src={data.photo_url}
-            alt=""
-            style={{ width: "100%", height: "100%", objectFit: "cover" }}
-          />
+    <div className="app event-container">
+      {data.photo_url && (
+        <div className="event-hero">
+          <img src={data.photo_url} alt="" className="img-fit" />
         </div>
-      ) : null}
+      )}
       <div className="event-wrap">
-        <section
-          className="event-card"
-          style={{
-            minHeight: "calc(100dvh - 98px)",
-            paddingBottom: 98,
-            boxSizing: "border-box",
-          }}
-        >
-          <div className="pills" style={{ marginTop: "7px" }}>
-            {/* Плашка пола — центрируем содержимое */}
-            <span
-              className="pill"
-              style={{
-                display: "inline-flex",
-                alignItems: "center",
-                justifyContent: "center",
-              }}
-            >
-              {genderLabel(data.gender_restriction)}
-            </span>
-            <span
-              className="pill"
-              style={{
-                display: "inline-flex",
-                alignItems: "center",
-                justifyContent: "center",
-              }}
-            >
-              {label}
-            </span>
+        <section className="event-card">
+          <div className="pills">
+            <span className="chip">{genderLabel(data.gender_restriction)}</span>
+            <span className="chip">{label}</span>
           </div>
-
           <div className="event-title">{data.title}</div>
-
           <div className="event-meta">{fmtDt(data.date_time)}</div>
           <div className="event-meta">
             {data.city} • {data.location}
           </div>
-
-          <p style={{ whiteSpace: "pre-wrap", marginTop: 12, marginBottom: 0 }}>
-            {data.description || "Описание отсутствует"}
-          </p>
-
-          <div
-            style={{
-              display: "flex",
-              alignItems: "center",
-              gap: 8,
-              marginTop: 16,
-            }}
-          >
-            <div style={{ width: "fit-content" }}>
+          <p className="mt-3">{data.description || "Описание отсутствует"}</p>
+          <div className="event-actions">
+            <div>
               <JoinButton
                 eventId={data.id}
                 joined={data.is_user_joined}
@@ -180,7 +137,7 @@ export default function EventPage() {
               />
             </div>
             {data.is_user_joined && (
-              <div style={{ width: "fit-content" }}>
+              <div>
                 <VisibilityToggle
                   eventId={data.id}
                   initial={myVisible ?? true}
@@ -195,24 +152,12 @@ export default function EventPage() {
                 whiteSpace: "nowrap",
                 fontSize: 14,
                 opacity: 0.85,
-                marginTop: 1,
               }}
             >
               Мест: {seatsText}
             </div>
           </div>
-
-          {/* Тоньше линия: 1px высотой */}
-          <hr
-            style={{
-              height: 1,
-              border: 0,
-              background: "#07253F",
-              margin: "12px 0 10px",
-              opacity: 0.6,
-            }}
-          />
-
+          <hr className="divider" />
           <div className="participants">
             <Participants
               eventId={data.id}

@@ -20,10 +20,17 @@ export class ErrorBoundary extends React.Component<
   render() {
     if (this.state.error) {
       return (
-        <div style={{ padding: 16 }}>
-          <h2>❌ Непредвиденная ошибка</h2>
-          <p>Попробуйте обновить страницу.</p>
-          <button onClick={() => window.location.reload()}>Обновить</button>
+        <div className="error-boundary">
+          <h2 className="error-boundary__title">❌ Непредвиденная ошибка</h2>
+          <p className="error-boundary__message">
+            Попробуйте обновить страницу.
+          </p>
+          <button
+            className="error-boundary__button"
+            onClick={() => window.location.reload()}
+          >
+            Обновить
+          </button>
         </div>
       );
     }

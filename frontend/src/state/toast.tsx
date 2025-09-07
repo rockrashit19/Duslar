@@ -39,29 +39,7 @@ export function ToastProvider({ children }: { children: React.ReactNode }) {
       {children}
       <div className="toast">
         {toast && (
-          <div
-            key={toast.id}
-            style={{
-              pointerEvents: "auto",
-              maxWidth: 500, // число, а не строка
-              padding: "10px 12px",
-              borderRadius: 10,
-              background:
-                toast.kind === "error"
-                  ? "#ffecec"
-                  : toast.kind === "success"
-                  ? "#e8fff0"
-                  : "#f5f5f5",
-              border:
-                "1px solid " +
-                (toast.kind === "error"
-                  ? "#ffc0c0"
-                  : toast.kind === "success"
-                  ? "#bde5c8"
-                  : "#e0e0e0"),
-              boxShadow: "0 4px 12px rgba(0,0,0,.06)",
-            }}
-          >
+          <div key={toast.id} className={`toast-message toast--${toast.kind}`}>
             {toast.text}
           </div>
         )}

@@ -90,50 +90,14 @@ export default function UserProfilePage() {
 
   return (
     <div className="app">
-      {/* Имя как заголовок страницы — как в ProfilePage */}
-      <h1 style={{ margin: "2rem 0 0 20px" }}>{data.full_name}</h1>
-
-      {/* Контент с боковыми 20px — как в ProfilePage */}
-      <div style={{ margin: "0 20px" }}>
-        {/* Шапка как в ProfilePage: аватар 100x100 слева, текст справа */}
-        <div
-          style={{
-            display: "grid",
-            gridTemplateColumns: "100px 1fr",
-            columnGap: 20,
-            alignItems: "center",
-            marginTop: "1.5rem",
-            maxWidth: 320,
-          }}
-        >
-          <div
-            style={{
-              width: 100,
-              height: 100,
-              overflow: "hidden",
-              background: "#eee",
-              borderRadius: 12,
-            }}
-          >
+      <h1 className="mt-6">{data.full_name}</h1>
+      <div className="profile-container">
+        <div className="profile-header">
+          <div className="avatar">
             {data.avatar_url ? (
-              <img
-                src={data.avatar_url}
-                alt=""
-                width={100}
-                height={100}
-                style={{ objectFit: "cover", width: "100%", height: "100%" }}
-              />
+              <img src={data.avatar_url} alt="" className="img-fit" />
             ) : (
-              <div
-                style={{
-                  height: "100%",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  color: "#999",
-                  fontWeight: 600,
-                }}
-              >
+              <div className="avatar__fallback">
                 {(data.full_name || data.username || "?")
                   .trim()
                   .charAt(0)
@@ -141,19 +105,11 @@ export default function UserProfilePage() {
               </div>
             )}
           </div>
-
-          <div style={{ display: "flex", flexDirection: "column" }}>
+          <div className="col">
             <div className="meta">
               Ник в Telegram:{" "}
               {data.username ? (
-                <a
-                  href={`https://t.me/${data.username}`}
-                  target="_blank"
-                  rel="noreferrer"
-                  style={{ textDecoration: "none" }}
-                >
-                  @{data.username}
-                </a>
+                <a href={`https://t.me/${data.username}`}>@{data.username}</a>
               ) : (
                 "не указан"
               )}
@@ -162,66 +118,21 @@ export default function UserProfilePage() {
             <div className="meta">Событий вместе: {data.events_together}</div>
           </div>
         </div>
-
-        {/* Личная заметка */}
-        <h3
-          style={{
-            marginTop: 20,
-            marginBottom: 10,
-            fontWeight: 400,
-          }}
-        >
-          Личная заметка
-        </h3>
-
+        <h3 className="mt-3 mb-2">Личная заметка</h3>
         <textarea
-          className="textarea"
+          className="textarea textarea--large"
           value={note}
           onChange={(e) => setNote(e.target.value)}
-          placeholder="тут вы можете внести заметку, которую видете только вы"
-          style={{
-            width: "100%",
-            height: 250,
-            borderRadius: 12,
-            background: "#efe9dd",
-            padding: "12px",
-            marginTop: 6,
-          }}
+          placeholder="тут вы можете внести заметку, которую видите только вы"
         />
-
-        {/* Кнопки: две колонки, каждая на всю ширину, gap 1.25rem */}
-        <div
-          style={{
-            display: "grid",
-            gridTemplateColumns: "1fr 1fr",
-            gap: "1.25rem",
-            marginTop: 12,
-          }}
-        >
-          <button
-            onClick={save}
-            disabled={loading}
-            className="btn"
-            style={{
-              height: "30px",
-              width: "100%",
-              background: "rgba(153,185,164,0.5)",
-              borderColor: "transparent",
-            }}
-          >
+        <div className="btn-grid">
+          <button onClick={save} disabled={loading} className="btn btn--save">
             Сохранить
           </button>
           <button
             onClick={remove}
             disabled={loading}
-            className="btn"
-            style={{
-              height: "30px",
-              width: "100%",
-              background: "rgba(153,185,164,0.25)",
-              borderColor: "transparent",
-              borderRadius: "20",
-            }}
+            className="btn btn--delete"
           >
             Удалить
           </button>

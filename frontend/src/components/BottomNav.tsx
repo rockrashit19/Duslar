@@ -1,4 +1,3 @@
-// BottomNav.tsx
 import { NavLink } from "react-router-dom";
 import addIcon from "../assets/add.png";
 import mosqueIcon from "../assets/mosque.png";

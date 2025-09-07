@@ -35,16 +35,7 @@ export default function JoinButton({
     <button
       onClick={onClick}
       disabled={loading}
-      style={{
-        padding: "10px 14px",
-        borderRadius: 20,
-        background: joined ? "#e5deccb3" : "#99b9a482",
-        color: joined ? "#07253F82" : "#07253F",
-        border: "none",
-        width: "100%",
-        minWidth: joined ? 95 : 200,
-        height: 40,
-      }}
+      className={`btn ${joined ? "btn--leave" : "btn--join"}`}
     >
       {loading ? "Подождите..." : joined ? "Выйти" : "Записаться"}
     </button>

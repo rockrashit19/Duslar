@@ -119,143 +119,73 @@ export default function ProfilePage() {
 
   return (
     <div className="app">
-      {/* Заголовок страницы */}
-      <h1 style={{ margin: "2rem 0 0 20px" }}>Мой профиль</h1>
-
-      {/* Контейнер содержимого */}
-      <div style={{ marginLeft: 20, marginRight: 20 }}>
-        {/* Шапка профиля */}
-        <section style={{ marginTop: "1.5rem" }}>
-          <div
-            className="grid"
-            style={{
-              gridTemplateRows: "100px auto auto",
-              gridTemplateColumns: "100px 1fr",
-              columnGap: 16,
-              rowGap: 12,
-              width: "100%",
-              maxWidth: 320,
-            }}
-          >
-            {/* Аватар */}
-            <div style={{ gridRow: 1, gridColumn: 1 }}>
-              <div
-                style={{
-                  width: 100,
-                  height: 100,
-                  overflow: "hidden",
-                  background: "#eee",
-                  borderRadius: 12,
-                }}
-              >
-                {avatarSrc ? (
-                  <img
-                    src={avatarSrc}
-                    alt="avatar"
-                    width={100}
-                    height={100}
-                    style={{
-                      objectFit: "cover",
-                      width: "100%",
-                      height: "100%",
-                    }}
-                    onError={(e) => {
-                      (e.currentTarget as HTMLImageElement).style.display =
-                        "none";
-                    }}
-                  />
-                ) : (
-                  <div
-                    className="center"
-                    style={{ height: "100%", color: "#999", fontWeight: 600 }}
-                  >
-                    {me?.full_name?.[0]?.toUpperCase() ||
-                      me?.username?.[0]?.toUpperCase() ||
-                      "?"}
-                  </div>
-                )}
-              </div>
+      <h1 className="mt-6">Мой профиль</h1>
+      <div className="profile-container">
+        <section className="mt-5">
+          <div className="profile-header">
+            <div className="avatar">
+              {avatarSrc ? (
+                <img
+                  src={avatarSrc}
+                  alt="avatar"
+                  className="img-fit"
+                  onError={(e) => (e.currentTarget.style.display = "none")}
+                />
+              ) : (
+                <div className="avatar__fallback">
+                  {me?.full_name?.[0]?.toUpperCase() ||
+                    me?.username?.[0]?.toUpperCase() ||
+                    "?"}
+                </div>
+              )}
             </div>
-
-            {/* Имя + мета */}
-            <div style={{ gridRow: 1, gridColumn: 2 }}>
-              <h2 style={{ margin: "10px 0 3px 0" }}>{me.full_name}</h2>
+            <div className="col">
+              <h2 className="mt-2 mb-1">{me.full_name}</h2>
               <div className="meta">@{clip17(me.username || "—")}</div>
               <div className="meta">Всего событий: {me.events_total ?? 0}</div>
               <div className="meta">Роль: {me.role || "user"}</div>
             </div>
-
-            {/* Поле «Город» */}
-            <div style={{ gridRow: 2, gridColumn: "1 / span 2" }}>
-              <div className="meta" style={{ marginBottom: 4 }}>
-                Город
-              </div>
-              <div className="field--icon">
-                <input
-                  className="input"
-                  value={city}
-                  onChange={(e) => onCityChange(e.target.value)}
-                  onBlur={onCityBlur}
-                  placeholder="Например, Казань"
-                  style={{
-                    fontSize: "0.85rem",
-                    height: 28,
-                    paddingLeft: 8,
-                  }}
-                />
-                <img className="icon" src={searchIcon} alt="" />
-              </div>
-              {savingCity && (
-                <div className="small muted" style={{ marginTop: 4 }}>
-                  Сохранение…
-                </div>
-              )}
+          </div>
+          <div className="mt-3">
+            <div className="field-label">Город</div>
+            <div className="field--icon">
+              <input
+                className="input input--small"
+                value={city}
+                onChange={(e) => onCityChange(e.target.value)}
+                onBlur={onCityBlur}
+                placeholder="Например, Казань"
+              />
+              <img className="icon" src={searchIcon} alt="" />
             </div>
-
-            {/* Поле «Пол» */}
-            <div style={{ gridRow: 3, gridColumn: "1 / span 2" }}>
-              <div className="meta" style={{ marginBottom: 4 }}>
-                Мой пол
-              </div>
-              <div className="field--icon">
-                <select
-                  className="select no-focus-ring"
-                  value={gender}
-                  onChange={(e) =>
-                    onGenderChange(
-                      e.target.value as "male" | "female" | "unknown"
-                    )
-                  }
-                  style={{
-                    fontSize: "0.85rem",
-                    height: 28,
-                    padding: "0 28px 0 8px",
-                    lineHeight: "18px",
-                  }}
-                >
-                  <option value="unknown">Не указан</option>
-                  <option value="male">Мужчина</option>
-                  <option value="female">Девушка</option>
-                </select>
-                <img
-                  className="icon"
-                  src={polygonIcon}
-                  alt=""
-                  style={{ width: 16, height: 7 }}
-                />
-              </div>
-              {savingGender && (
-                <div className="small muted" style={{ marginTop: 4 }}>
-                  Сохранение…
-                </div>
-              )}
+            {savingCity && <div className="small muted mt-1">Сохранение…</div>}
+          </div>
+          <div className="mt-3">
+            <div className="field-label">Мой пол</div>
+            <div className="field--icon">
+              <select
+                className="select no-focus-ring select--small"
+                value={gender}
+                onChange={(e) =>
+                  onGenderChange(
+                    e.target.value as "male" | "female" | "unknown"
+                  )
+                }
+              >
+                <option value="unknown">Не указан</option>
+                <option value="male">Мужчина</option>
+                <option value="female">Девушка</option>
+              </select>
+              <img className="icon" src={polygonIcon} alt="" />
             </div>
+            {savingGender && (
+              <div className="small muted mt-1">Сохранение…</div>
+            )}
           </div>
         </section>
-
-        <section style={{ marginTop: "1.5rem" }}>
-          <h2 style={{ margin: "0 0 .2rem 0" }}>Список событий</h2>
-          <div className="grid" style={{ gap: 8 }}>
+        <section className="mt-5">
+          <h2 className="mb-1">Список событий</h2>
+          <div className="grid gap-2">
             {rows.map((ev) => (
               <EventCard key={ev.id} event={ev} onChanged={patchEvent} />
             ))}

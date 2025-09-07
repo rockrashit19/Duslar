@@ -39,71 +39,19 @@ export default function EventCard({
   };
 
   return (
-    <div
-      className="event_card"
-      style={{
-        display: "grid",
-        gridTemplateColumns: "100px 1fr",
-        columnGap: "1rem",
-        padding: 10,
-        borderRadius: 10,
-        background: "var(--bg-soft)",
-      }}
-    >
-      {/* Фото 69x69, r=10 */}
-      <div
-        style={{
-          width: 100,
-          height: 100,
-          borderRadius: 10,
-          overflow: "hidden",
-          background: "#f0f0f0",
-          border: "1px solid #99b9a4",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          color: "#777",
-          fontSize: "0.75rem",
-          fontWeight: 500,
-        }}
-      >
+    <div className="event_card">
+      <div className="event-image">
         {event.photo_url ? (
-          <img
-            src={event.photo_url}
-            alt=""
-            width={100}
-            height={100}
-            style={{ objectFit: "cover", width: "100%", height: "100%" }}
-          />
+          <img src={event.photo_url} alt="" className="img-fit" />
         ) : (
           "нет фото"
         )}
       </div>
-
-      {/* Контент */}
-      <div style={{ display: "grid" }}>
-        {/* Заголовок */}
-        <div style={{ paddingTop: 5, fontWeight: 500, fontSize: "1rem" }}>
-          {event.title}
-        </div>
-
-        {/* Метаданные как в макете (маленький полупрозрачный текст) */}
-        <div
-          className="meta"
-          style={{ color: "color-mix(in srgb, var(--text) 75%, transparent)" }}
-        >
-          Город: {event.city}
-        </div>
-        <div
-          className="meta"
-          style={{ color: "color-mix(in srgb, var(--text) 75%, transparent)" }}
-        >
-          Когда: {fmtDt(event.date_time)}
-        </div>
-        <div
-          className="meta"
-          style={{ color: "color-mix(in srgb, var(--text) 75%, transparent)" }}
-        >
+      <div className="col">
+        <div className="event-title">{event.title}</div>
+        <div className="meta">Город: {event.city}</div>
+        <div className="meta">Когда: {fmtDt(event.date_time)}</div>
+        <div className="meta">
           Для кого:{" "}
           {event.gender_restriction === "all"
             ? "все"
@@ -111,34 +59,23 @@ export default function EventCard({
             ? "мужчины"
             : "девушки"}
         </div>
-
-        <div
-          style={{
-            display: "grid",
-            gridTemplateColumns: "1fr 1fr",
-            gap: 8,
-            marginTop: 10,
-            alignItems: "center",
-            flexWrap: "nowrap",
-          }}
-        >
+        <div className="btn-grid mt-2">
           {canJoin && !event.is_user_joined ? (
             <>
-              <button disabled={busy} onClick={doJoin} style={chipStylePrimary}>
+              <button
+                disabled={busy}
+                onClick={doJoin}
+                className="chip chip--primary"
+              >
                 Записаться
               </button>
               <Link to={`/events/${event.id}`}>
-                <button style={chipStyleSecondary}>Подробнее</button>
+                <button className="chip chip--secondary">Подробнее</button>
               </Link>
             </>
           ) : (
-            <Link
-              to={`/events/${event.id}`}
-              style={{ textDecoration: "none", gridColumn: "span 2" }}
-            >
-              <button style={{ ...chipStyleSecondary, width: "100%" }}>
-                Подробнее
-              </button>
+            <Link to={`/events/${event.id}`} className="grid-span-2">
+              <button className="chip chip--secondary">Подробнее</button>
             </Link>
           )}
         </div>

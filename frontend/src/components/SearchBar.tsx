@@ -27,22 +27,13 @@ export default function SearchBar({
   };
 
   return (
-    <form onSubmit={submit} style={{ margin: 0 }}>
-      <div className="field--icon" style={{ width: "100%" }}>
+    <form onSubmit={submit} className="search__form">
+      <div className="field--icon">
         <input
           className="input search-input"
           value={q}
           onChange={(e) => setQ(e.target.value)}
           placeholder="Найти мероприятие"
-          style={{
-            height: 40,
-            borderRadius: 10,
-            background: "#efe9dd",
-            border: "none",
-            boxShadow: "none",
-            paddingLeft: 12,
-            paddingRight: 36,
-          }}
         />
         <img className="icon" src={searchIcon} alt="" />
       </div>

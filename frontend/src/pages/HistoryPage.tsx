@@ -33,18 +33,8 @@ export default function HistoryPage() {
     })();
   }, [show]);
 
-  if (err)
-    return (
-      <div className="app" style={{ padding: 16 }}>
-        ❌ {err}
-      </div>
-    );
-  if (!rows)
-    return (
-      <div className="app" style={{ padding: 16 }}>
-        Загрузка…
-      </div>
-    );
+  if (err) return <div className="app app--padded">❌ {err}</div>;
+  if (!rows) return <div className="app app--padded">Загрузка…</div>;
 
   return (
     <div className="app history">
@@ -78,20 +68,14 @@ function HistoryRow({ row, onOpen }: { row: Row; onOpen: () => void }) {
       {/* фото */}
       <div className="hrow__avatar">
         {row.avatar_url ? (
-          <img
-            src={row.avatar_url}
-            alt=""
-            width={69}
-            height={69}
-            style={{ objectFit: "cover", width: "100%", height: "100%" }}
-          />
+          <img src={row.avatar_url} alt="" className="hrow__avatar-img" />
         ) : (
-          initial
+          <div className="hrow__avatar--fallback">{initial}</div>
         )}
       </div>
 
       {/* текст (имя + мета) */}
-      <div>
+      <div className="hrow__content">
         <div className="hrow__name">{row.full_name}</div>
         <div className="hrow__meta">
           {row.username ? (

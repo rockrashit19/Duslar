@@ -203,293 +203,146 @@ function CreateEventForm() {
 
   return (
     <div className="app">
-      <h1 style={{ margin: "2rem 0 0 20px" }}>Создать событие</h1>
-
-      <div style={{ margin: "0 20px" }}>
-        <div className="filter">
-          {/* Название */}
-          <label className="col" style={{ gap: 6, marginTop: 16 }}>
-            <span
-              className="meta"
-              style={{ fontSize: "1rem", color: "inherit" }}
-            >
-              Название:
-            </span>
+      <h1 className="mt-6">Создать событие</h1>
+      <div className="form-container">
+        <div className="form-field">
+          <span className="meta">Название:</span>
+          <input
+            className="input"
+            placeholder="не более 15 символов"
+            value={form.title}
+            onChange={(e) => onChange("title", e.target.value)}
+            maxLength={15}
+          />
+        </div>
+        <div className="form-field">
+          <span className="meta">Описание:</span>
+          <textarea
+            className="textarea"
+            rows={5}
+            value={form.description}
+            onChange={(e) => onChange("description", e.target.value)}
+          />
+        </div>
+        <div className="form-field">
+          <span className="meta">Город:</span>
+          <input
+            className="input"
+            value={form.city}
+            onChange={(e) => onChange("city", onlyRussian(e.target.value))}
+          />
+        </div>
+        <div className="form-field">
+          <span className="meta">Точный адрес:</span>
+          <input
+            className="input"
+            value={form.location}
+            onChange={(e) => onChange("location", onlyRussian(e.target.value))}
+          />
+        </div>
+        <div className="form-field">
+          <span className="meta">Количество участников:</span>
+          <input
+            className="input"
+            type="text"
+            inputMode="numeric"
+            placeholder="необязательно"
+            value={form.max_participants as any}
+            onChange={(e) =>
+              onChange(
+                "max_participants",
+                onlyNumbers(e.target.value) === ""
+                  ? ""
+                  : Number(onlyNumbers(e.target.value))
+              )
+            }
+          />
+        </div>
+        <div className="form-field">
+          <span className="meta">Дата:</span>
+          <div className="field--icon">
             <input
-              className="input"
-              placeholder="не более 15 символов"
-              value={form.title}
-              onChange={(e) => onChange("title", e.target.value)}
-              maxLength={15}
+              className="input no-native-picker"
+              type="date"
+              value={form.date}
+              onChange={(e) => onChange("date", e.target.value)}
             />
-          </label>
-
-          {/* Описание */}
-          <label className="col" style={{ gap: 6, marginTop: 16 }}>
-            <span
-              className="meta"
-              style={{ fontSize: "1rem", color: "inherit" }}
-            >
-              Описание:
-            </span>
-            <textarea
-              className="textarea"
-              rows={5}
-              value={form.description}
-              onChange={(e) => onChange("description", e.target.value)}
-              style={{ padding: "10px" }}
-            />
-          </label>
-
-          {/* Город */}
-          <label className="col" style={{ gap: 6, marginTop: 16 }}>
-            <span
-              className="meta"
-              style={{ fontSize: "1rem", color: "inherit" }}
-            >
-              Город:
-            </span>
-            <input
-              className="input"
-              value={form.city}
-              onChange={(e) => onChange("city", onlyRussian(e.target.value))}
-            />
-          </label>
-
-          {/* Точный адрес */}
-          <label className="col" style={{ gap: 6, marginTop: 16 }}>
-            <span
-              className="meta"
-              style={{ fontSize: "1rem", color: "inherit" }}
-            >
-              Точный адрес:
-            </span>
-            <input
-              className="input"
-              value={form.location}
-              onChange={(e) =>
-                onChange("location", onlyRussian(e.target.value))
-              }
-            />
-          </label>
-
-          {/* Количество участников (опц.) */}
-          <label className="col" style={{ gap: 6, marginTop: 16 }}>
-            <span
-              className="meta"
-              style={{ fontSize: "1rem", color: "inherit" }}
-            >
-              Количество участников:
-            </span>
-            <input
-              className="input"
-              type="text"
-              inputMode="numeric"
-              placeholder="необязательно"
-              value={form.max_participants as any}
-              onChange={(e) =>
-                onChange(
-                  "max_participants",
-                  onlyNumbers(e.target.value) === ""
-                    ? ""
-                    : Number(onlyNumbers(e.target.value))
-                )
-              }
-            />
-          </label>
-
-          {/* Дата */}
-
-          <label className="col" style={{ gap: 6, marginTop: 16 }}>
-            <span
-              className="meta"
-              style={{ fontSize: "1rem", color: "inherit" }}
-            >
-              Дата:
-            </span>
-            <div className="field--icon">
-              <input
-                className="input no-native-picker"
-                type="date"
-                value={form.date}
-                onChange={(e) => onChange("date", e.target.value)}
-                style={{
-                  borderRadius: 20,
-                  fontSize: "1rem",
-                  fontWeight: 400,
-                  paddingLeft: 15,
-                }}
-              />
-              <img className="icon" src={calendarIcon} alt="" />
-            </div>
-          </label>
-
-          {/* Время */}
-          <label className="col" style={{ gap: 6, marginTop: 16 }}>
-            <span
-              className="meta"
-              style={{ fontSize: "1rem", color: "inherit" }}
-            >
-              Время:
-            </span>
-            <div className="field--icon">
-              <input
-                className="input"
-                type="time"
-                step={60}
-                value={form.time}
-                onChange={(e) => onChange("time", e.target.value)}
-                style={{
-                  borderRadius: 20,
-                  fontSize: "1rem",
-                  fontWeight: 400,
-                  paddingLeft: 15,
-                }}
-              />
-              <img className="icon" src={timeIcon} alt="" />
-            </div>
-          </label>
-
-          {/* Для кого */}
-          <label className="col" style={{ gap: 6, marginTop: 16 }}>
-            <span
-              className="meta"
-              style={{ fontSize: "1rem", color: "inherit" }}
-            >
-              Для кого:
-            </span>
-            <div className="field--icon">
-              <select
-                className="select"
-                value={form.gender_restriction}
-                onChange={(e) =>
-                  onChange(
-                    "gender_restriction",
-                    e.target.value as "all" | "male" | "female"
-                  )
-                }
-              >
-                <option value="all">все</option>
-                <option value="male">мужчины</option>
-                <option value="female">девушки</option>
-              </select>
-              <img
-                className="icon"
-                src={chevronIcon}
-                alt=""
-                style={{ width: 16, height: 7 }}
-              />
-            </div>
-          </label>
-
-          {/* Фото (опционально) */}
-          <div style={{ marginTop: 16 }}>
-            <div
-              style={{
-                display: "flex",
-                alignItems: "baseline",
-                gap: 8,
-                marginBottom: 6,
-              }}
-            >
-              <span
-                style={{ fontSize: "1rem", fontWeight: 400, color: "inherit" }}
-              >
-                Фотография
-              </span>
-              <span className="muted" style={{ fontSize: "0.875rem" }}>
-                (опционально)
-              </span>
-            </div>
-
-            <input
-              ref={hiddenFileRef}
-              type="file"
-              accept="image/*"
-              onChange={onPick}
-              style={{ display: "none" }}
-              disabled={busy}
-            />
-
-            <div style={{ display: "flex", alignItems: "center" }}>
-              <button
-                type="button"
-                onClick={openPicker}
-                disabled={busy}
-                style={{
-                  width: 163,
-                  height: 33,
-                  borderRadius: 8,
-                  border: "none",
-                  background: "#EFE9DD",
-                  color: "rgba(11, 41, 67, 0.25)",
-                  fontWeight: 500,
-                  fontSize: "0.75rem",
-                  textAlign: "center",
-                  cursor: "pointer",
-                }}
-              >
-                {busy ? "Загрузка…" : "Выберите файл"}
-              </button>
-
-              <div
-                title={fileName || "Файл не выбран"}
-                style={{
-                  marginLeft: 20,
-                  flex: 1,
-                  minWidth: 0,
-                  color: "rgba(11, 41, 67, 0.25)",
-                  fontWeight: 500,
-                  fontSize: "0.75rem",
-                  whiteSpace: "nowrap",
-                  overflow: "hidden",
-                  textOverflow: "ellipsis",
-                  textAlign: "left",
-                }}
-              >
-                {fileName || "Файл не выбран"}
-              </div>
-            </div>
-
-            {preview && (
-              <div
-                style={{
-                  marginTop: 12,
-                  borderRadius: 12,
-                  padding: 0,
-                  border: "1px solid rgba(0,0,0,.06)",
-                }}
-              >
-                <img
-                  src={preview}
-                  alt=""
-                  style={{
-                    display: "block",
-                    width: "100%",
-                    maxHeight: 220,
-                    objectFit: "cover",
-                    borderRadius: 8,
-                  }}
-                />
-              </div>
-            )}
+            <img className="icon" src={calendarIcon} alt="" />
           </div>
         </div>
-
-        {/* Создать */}
-        <div style={{ marginTop: 20 }}>
+        <div className="form-field">
+          <span className="meta">Время:</span>
+          <div className="field--icon">
+            <input
+              className="input"
+              type="time"
+              step={60}
+              value={form.time}
+              onChange={(e) => onChange("time", e.target.value)}
+            />
+            <img className="icon" src={timeIcon} alt="" />
+          </div>
+        </div>
+        <div className="form-field">
+          <span className="meta">Для кого:</span>
+          <div className="field--icon">
+            <select
+              className="select"
+              value={form.gender_restriction}
+              onChange={(e) =>
+                onChange(
+                  "gender_restriction",
+                  e.target.value as "all" | "male" | "female"
+                )
+              }
+            >
+              <option value="all">все</option>
+              <option value="male">мужчины</option>
+              <option value="female">девушки</option>
+            </select>
+            <img className="icon" src={chevronIcon} alt="" />
+          </div>
+        </div>
+        <div className="form-field">
+          <div className="row">
+            <span className="meta">Фотография</span>
+            <span className="muted small">(опционально)</span>
+          </div>
+          <input
+            ref={hiddenFileRef}
+            type="file"
+            accept="image/*"
+            onChange={onPick}
+            style={{ display: "none" }}
+            disabled={busy}
+          />
+          <div className="file-upload">
+            <button
+              type="button"
+              onClick={openPicker}
+              disabled={busy}
+              className="file-upload__btn"
+            >
+              {busy ? "Загрузка…" : "Выберите файл"}
+            </button>
+            <div
+              className="file-upload__name"
+              title={fileName || "Файл не выбран"}
+            >
+              {fileName || "Файл не выбран"}
+            </div>
+          </div>
+          {preview && (
+            <div className="preview-image">
+              <img src={preview} alt="" className="img-fit" />
+            </div>
+          )}
+        </div>
+        <div className="mt-5">
           <button
             disabled={!canSubmit}
             onClick={submit}
             className="btn btn--primary"
-            style={{
-              width: "100%",
-              minHeight: 40,
-              borderRadius: 10,
-              opacity: canSubmit ? 1 : 0.3,
-              cursor: canSubmit ? "pointer" : "default",
-              background: "#99B9A4",
-            }}
           >
             {busy ? "Создаём..." : "Создать"}
           </button>

@@ -36,16 +36,7 @@ export default function VisibilityToggle({
     <button
       onClick={onClick}
       disabled={loading}
-      style={{
-        padding: val ? "10px 14px" : "10px 10px",
-        borderRadius: 20,
-        background: "#e5deccb3",
-        color: "#07253F82",
-        border: "none",
-        width: "100%",
-        minWidth: 95,
-        height: 40,
-      }}
+      className="btn btn--visibility"
     >
       {loading ? "..." : val ? "Скрыть" : "Показать"}
     </button>
