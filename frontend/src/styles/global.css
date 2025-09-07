@@ -3,6 +3,7 @@
   -webkit-tap-highlight-color: transparent;
   min-width: 390px;
   max-width: 430px;
+  width: 100%;
 }
 html,
 body,
