@@ -95,22 +95,22 @@ const baseChip: React.CSSProperties = {
   cursor: "pointer",
 };
 
-const chipStylePrimary: React.CSSProperties = {
-  ...baseChip,
-  background: "rgba(153, 185, 164, 0.5)", // #99B9A4 50%
-  color: "var(--text)",
-  fontWeight: 400,
-  fontSize: "0.75rem",
-  lineHeight: "10px",
-  padding: "10px 14px",
-};
+// const chipStylePrimary: React.CSSProperties = {
+//   ...baseChip,
+//   background: "rgba(153, 185, 164, 0.5)", // #99B9A4 50%
+//   color: "var(--text)",
+//   fontWeight: 400,
+//   fontSize: "0.75rem",
+//   lineHeight: "10px",
+//   padding: "10px 14px",
+// };
 
-const chipStyleSecondary: React.CSSProperties = {
-  ...baseChip,
-  background: "rgba(153, 185, 164, 0.3)", // #99B9A4 30%
-  color: "var(--text)",
-  fontWeight: 400,
-  fontSize: "0.75rem",
-  lineHeight: "10px",
-  padding: "10px 14px",
-};
+// const chipStyleSecondary: React.CSSProperties = {
+//   ...baseChip,
+//   background: "rgba(153, 185, 164, 0.3)", // #99B9A4 30%
+//   color: "var(--text)",
+//   fontWeight: 400,
+//   fontSize: "0.75rem",
+//   lineHeight: "10px",
+//   padding: "10px 14px",
+// };
