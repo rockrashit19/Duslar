@@ -11,10 +11,6 @@ os.makedirs(settings.media_dir, exist_ok=True)
 
 app.mount("/media", StaticFiles(directory=settings.media_dir), name="media")
 
-origins = []
-if settings.frontend_url:
-    origins.append(str(settings.frontend_url))
-
 app.add_middleware(
     CORSMiddleware,
     allow_origins=[str(settings.frontend_url)],

@@ -18,6 +18,8 @@ def get_db():
         
 @router.post("/auth/telegram/init", response_model=TokenOut)
 def telegram_init(payload: TelegramInintIn, db: Session = Depends(get_db)):
+    if not db:
+        raise HTTPException(status_code=404, detail="DB not found")
     bot_token = settings.telegram_bot_token.get_secret_value()
     try:
         user_data = validate_init_data(payload.init_data, bot_token)

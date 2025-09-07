@@ -43,7 +43,7 @@ export function ToastProvider({ children }: { children: React.ReactNode }) {
             key={toast.id}
             style={{
               pointerEvents: "auto",
-              maxWidth: 500, // число, а не строка
+              maxWidth: 500,
               padding: "10px 12px",
               borderRadius: 10,
               background:
