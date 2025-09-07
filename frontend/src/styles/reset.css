@@ -5,6 +5,8 @@
 }
 * {
   margin: 0;
+  min-width: 390px;
+  max-width: 430px;
 }
 html,
 body,
