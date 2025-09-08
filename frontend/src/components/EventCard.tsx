@@ -162,7 +162,7 @@ export default function EventCard({
           {canJoin && !event.is_user_joined ? (
             <>
               <button disabled={busy} onClick={doJoin} style={chipStylePrimary}>
-                Записаться
+                Запись
               </button>
               <Link to={`/events/${event.id}`}>
                 <button style={chipStyleSecondary}>Подробнее</button>
