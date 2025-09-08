@@ -48,9 +48,10 @@ export default function EventCard({
         padding: 10,
         borderRadius: 10,
         background: "var(--bg-soft)",
+        margin: "0 4px 12px 4px",
+        overflow: "hidden",
       }}
     >
-      {/* Фото 69x69, r=10 */}
       <div
         style={{
           width: 100,
@@ -80,29 +81,65 @@ export default function EventCard({
         )}
       </div>
 
-      {/* Контент */}
-      <div style={{ display: "grid" }}>
-        {/* Заголовок */}
-        <div style={{ paddingTop: 5, fontWeight: 500, fontSize: "1rem" }}>
+      <div
+        style={{
+          display: "grid",
+          minWidth: 0,
+        }}
+      >
+        {/* Заголовок с переносом */}
+        <div
+          style={{
+            paddingTop: 5,
+            fontWeight: 500,
+            fontSize: "1rem",
+            wordWrap: "break-word",
+            overflowWrap: "break-word",
+            hyphens: "auto",
+          }}
+        >
           {event.title}
         </div>
 
-        {/* Метаданные как в макете (маленький полупрозрачный текст) */}
+        {/* Метаданные с прокруткой */}
         <div
           className="meta"
-          style={{ color: "color-mix(in srgb, var(--text) 75%, transparent)" }}
+          style={{
+            color: "color-mix(in srgb, var(--text) 75%, transparent)",
+            whiteSpace: "nowrap",
+            overflowX: "auto",
+            overflowY: "hidden",
+            scrollbarWidth: "none",
+            msOverflowStyle: "none",
+            paddingBottom: 2,
+            WebkitOverflowScrolling: "touch",
+          }}
         >
           Город: {event.city}
         </div>
         <div
           className="meta"
-          style={{ color: "color-mix(in srgb, var(--text) 75%, transparent)" }}
+          style={{
+            color: "color-mix(in srgb, var(--text) 75%, transparent)",
+            whiteSpace: "nowrap",
+            overflowX: "auto",
+            overflowY: "hidden",
+            scrollbarWidth: "thin",
+            paddingBottom: 2,
+          }}
         >
           Когда: {fmtDt(event.date_time)}
         </div>
         <div
           className="meta"
-          style={{ color: "color-mix(in srgb, var(--text) 75%, transparent)" }}
+          style={{
+            color: "color-mix(in srgb, var(--text) 75%, transparent)",
+            whiteSpace: "nowrap",
+            overflowX: "auto",
+            overflowY: "hidden",
+            scrollbarWidth: "thin",
+            paddingBottom: 2,
+          }}
         >
           Для кого:{" "}
           {event.gender_restriction === "all"
@@ -119,7 +156,7 @@ export default function EventCard({
             gap: 8,
             marginTop: 10,
             alignItems: "center",
-            flexWrap: "nowrap",
+            marginRight: 8,
           }}
         >
           {canJoin && !event.is_user_joined ? (
@@ -136,7 +173,13 @@ export default function EventCard({
               to={`/events/${event.id}`}
               style={{ textDecoration: "none", gridColumn: "span 2" }}
             >
-              <button style={{ ...chipStyleSecondary, width: "100%" }}>
+              <button
+                style={{
+                  ...chipStyleSecondary,
+                  width: "100%",
+                  boxSizing: "border-box",
+                }}
+              >
                 Подробнее
               </button>
             </Link>
@@ -160,20 +203,28 @@ const baseChip: React.CSSProperties = {
 
 const chipStylePrimary: React.CSSProperties = {
   ...baseChip,
-  background: "rgba(153, 185, 164, 0.5)", // #99B9A4 50%
+  background: "rgba(153, 185, 164, 0.5)",
   color: "var(--text)",
   fontWeight: 400,
   fontSize: "0.75rem",
   lineHeight: "10px",
   padding: "10px 14px",
+  whiteSpace: "nowrap",
+  overflow: "hidden",
+  textOverflow: "ellipsis",
+  minWidth: 0,
 };
 
 const chipStyleSecondary: React.CSSProperties = {
   ...baseChip,
-  background: "rgba(153, 185, 164, 0.3)", // #99B9A4 30%
+  background: "rgba(153, 185, 164, 0.3)",
   color: "var(--text)",
   fontWeight: 400,
   fontSize: "0.75rem",
   lineHeight: "10px",
   padding: "10px 14px",
+  whiteSpace: "nowrap",
+  overflow: "hidden",
+  textOverflow: "ellipsis",
+  minWidth: 0,
 };

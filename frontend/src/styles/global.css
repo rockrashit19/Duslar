@@ -680,3 +680,31 @@ input[type="time"] {
   width: fit-content;
   max-width: 100%;
 }
+
+/* Скрыть скроллбар для Webkit-браузеров (Chrome, Safari) */
+.meta::-webkit-scrollbar {
+  display: none;
+  width: 0;
+  height: 0;
+  background: transparent;
+}
+
+/* Скрыть скроллбар для Firefox */
+.meta {
+  scrollbar-width: none;
+}
+
+/* Скрыть скроллбар для IE/Edge */
+.meta {
+  -ms-overflow-style: none;
+}
+
+/* Убедиться, что все скроллбары скрыты */
+.meta::-webkit-scrollbar-track,
+.meta::-webkit-scrollbar-thumb,
+.meta::-webkit-scrollbar-button,
+.meta::-webkit-scrollbar-corner {
+  display: none;
+  visibility: hidden;
+  opacity: 0;
+}
