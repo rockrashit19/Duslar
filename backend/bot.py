@@ -120,31 +120,30 @@ async def on_shutdown():
     log.info("Bot stopped")
 
 
-# ---------- /start ----------
-# @dp.message(CommandStart())
-# async def cmd_start(message: Message):
-#     app_url = str(settings.frontend_url or "").rstrip("/")
-#     if app_url:
-#         # Кнопка, открывающая MiniApp (WebAppInfo) — работает внутри Telegram
-#         kb = InlineKeyboardMarkup(
-#             inline_keyboard=[
-#                 [
-#                     InlineKeyboardButton(
-#                         text="Открыть приложение",
-#                         web_app=WebAppInfo(url=app_url),
-#                     )
-#                 ]
-#             ]
-#         )
-#     else:
-#         # Фоллбек — просто текст без кнопки
-#         kb = None
+@dp.message(CommandStart())
+async def cmd_start(message: Message):
+    app_url = str(settings.frontend_url or "").rstrip("/")
+    if app_url:
+        # Кнопка, открывающая MiniApp (WebAppInfo) — работает внутри Telegram
+        kb = InlineKeyboardMarkup(
+            inline_keyboard=[
+                [
+                    InlineKeyboardButton(
+                        text="Открыть приложение",
+                        web_app=WebAppInfo(url=app_url),
+                    )
+                ]
+            ]
+        )
+    else:
+        # Фоллбек — просто текст без кнопки
+        kb = None
 
-#     await message.answer(
-#         "Мир вам! Это бот Дуслар 👋\n"
-#         "Нажмите кнопку ниже, чтобы открыть приложение.",
-#         reply_markup=kb,
-#     )
+    await message.answer(
+        "Мир вам! Это бот Дуслар 👋\n"
+        "Нажмите кнопку ниже, чтобы открыть приложение.",
+        reply_markup=kb,
+    )
 
 
 # ---------- /changerole <username> <role> ----------
