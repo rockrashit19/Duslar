@@ -17,6 +17,9 @@ router = APIRouter()
 def _tg_avatar(username: Optional[str]) -> Optional[str]:
     return f"https://t.me/i/userpic/320/{username}.jpg" if username else None
 
+def _now_utc() -> datetime:
+    return datetime.now(timezone.utc)
+
 @router.get("/me", response_model=MeOut)
 def get_me(
     db: Session = Depends(get_db),
@@ -159,8 +162,11 @@ def get_public_user(
             and_(
                 ep1.user_id == current.id,
                 ep1.status == ParticipationStatus.joined,
+                ep1.is_visible == True,  
                 ep2.user_id == target.id,
                 ep2.status == ParticipationStatus.joined,
+                ep2.is_visible == True,  
+                Event.date_time < _now_utc(),  
             )
         )
     ) or 0
