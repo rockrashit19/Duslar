@@ -120,7 +120,7 @@ export default function EventPage() {
         <section
           className="event-card"
           style={{
-            minHeight: "calc(100dvh - 98px)",
+            // minHeight: "calc(100dvh - 98px)",
             // paddingBottom: 98,
             boxSizing: "border-box",
           }}
