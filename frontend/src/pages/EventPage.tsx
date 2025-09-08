@@ -152,8 +152,24 @@ export default function EventPage() {
           <div className="event-title">{data.title}</div>
 
           <div className="event-meta">{fmtDt(data.date_time)}</div>
-          <div className="event-meta">
-            {data.city} • {data.location}
+          <div
+            className="event-meta"
+            style={{
+              display: "flex",
+              alignItems: "center",
+              marginRight: 50,
+              overflow: "hidden",
+            }}
+          >
+            <span
+              style={{
+                whiteSpace: "nowrap",
+                overflow: "hidden",
+                textOverflow: "ellipsis",
+              }}
+            >
+              {data.city} • {data.location}
+            </span>
           </div>
 
           <p style={{ whiteSpace: "pre-wrap", marginTop: 12, marginBottom: 0 }}>
