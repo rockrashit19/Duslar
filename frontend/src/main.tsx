@@ -8,10 +8,14 @@ import { ErrorBoundary } from "./state/ErrorBoundary";
 import OfflineBar from "./components/OfflineBar";
 import "./styles/reset.css";
 import "./styles/global.css";
+import "./lib/telegram";
+import { initTGSDK } from "./lib/telegram";
 // import { applyTelegramTheme, bindThemeListener } from "./lib/telegramTheme";
 
 // applyTelegramTheme();
 // bindThemeListener();
+
+initTGSDK();
 
 createRoot(document.getElementById("root")!).render(
   <React.StrictMode>

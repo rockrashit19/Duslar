@@ -3,6 +3,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import { api } from "../lib/api";
 import { useToast } from "../state/toast";
 import { backButton } from "@telegram-apps/sdk";
+import { isTGReady } from "../lib/telegram";
 
 type UserPublic = {
   id: number;
@@ -25,20 +26,26 @@ export default function UserProfilePage() {
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    console.log("TG back supported?", backButton.isSupported());
-    if (backButton.mount.isAvailable()) backButton.mount();
-    if (backButton.show.isAvailable()) backButton.show();
+    if (!isTGReady() || !backButton.isSupported()) return;
 
-    const off = backButton.onClick.isAvailable()
-      ? backButton.onClick(() => window.history.back())
-      : undefined;
+    try {
+      (backButton as any).mount?.();
+      backButton.show();
+    } catch {}
+
+    let off: undefined | (() => void);
+    try {
+      off = backButton.onClick(() => nav(-1));
+    } catch {}
 
     return () => {
-      off?.();
-      backButton.hide?.();
-      backButton.unmount?.();
+      try {
+        off?.();
+        backButton.hide();
+        (backButton as any).unmount?.();
+      } catch {}
     };
-  }, []);
+  }, [nav]);
 
   useEffect(() => {
     (async () => {
