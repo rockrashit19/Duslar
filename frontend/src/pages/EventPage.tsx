@@ -155,17 +155,19 @@ export default function EventPage() {
           <div
             className="event-meta"
             style={{
-              display: "flex",
-              alignItems: "center",
               marginRight: 50,
               overflow: "hidden",
+              position: "relative",
             }}
           >
             <span
+              title={`${data.city} • ${data.location}`}
               style={{
                 whiteSpace: "nowrap",
                 overflow: "hidden",
                 textOverflow: "ellipsis",
+                display: "block",
+                cursor: "help",
               }}
             >
               {data.city} • {data.location}
