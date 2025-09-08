@@ -185,6 +185,7 @@ export default function EventPage() {
               alignItems: "center",
               gap: 8,
               marginTop: 16,
+              position: "relative", // Добавляем относительное позиционирование
             }}
           >
             <div style={{ width: "fit-content" }}>
@@ -210,7 +211,8 @@ export default function EventPage() {
             <div
               className="meta"
               style={{
-                marginLeft: "auto",
+                position: "absolute", // Абсолютное позиционирование
+                right: 0, // Фиксируем у правого края
                 whiteSpace: "nowrap",
                 fontSize: 14,
                 opacity: 0.85,

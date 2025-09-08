@@ -36,17 +36,18 @@ export default function JoinButton({
       onClick={onClick}
       disabled={loading}
       style={{
-        padding: "10px 14px",
+        padding: "8px 12px", // Уменьшили padding
         borderRadius: 20,
         background: joined ? "#e5deccb3" : "#99b9a482",
         color: joined ? "#07253F82" : "#07253F",
         border: "none",
-        width: "100%",
-        minWidth: joined ? 95 : 200,
-        height: 40,
+        width: "fit-content", // Ширина по содержимому
+        minWidth: joined ? 80 : 120, // Уменьшили минимальную ширину
+        height: 32, // Уменьшили высоту
+        fontSize: "0.875rem", // Уменьшили шрифт
       }}
     >
-      {loading ? "Подождите..." : joined ? "Выйти" : "Записаться"}
+      {loading ? "..." : joined ? "Выйти" : "Записаться"}
     </button>
   );
 }

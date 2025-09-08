@@ -37,14 +37,15 @@ export default function VisibilityToggle({
       onClick={onClick}
       disabled={loading}
       style={{
-        padding: val ? "10px 14px" : "10px 10px",
+        padding: "8px 12px", // Уменьшили padding
         borderRadius: 20,
         background: "#e5deccb3",
         color: "#07253F82",
         border: "none",
-        width: "100%",
-        minWidth: 95,
-        height: 40,
+        width: "fit-content", // Ширина по содержимому
+        minWidth: 80, // Уменьшили минимальную ширину
+        height: 32, // Уменьшили высоту
+        fontSize: "0.875rem", // Уменьшили шрифт
       }}
     >
       {loading ? "..." : val ? "Скрыть" : "Показать"}
