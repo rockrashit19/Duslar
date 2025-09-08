@@ -75,11 +75,6 @@ def make_admin_jwt(sub: str) -> str:
 
 
 def is_admin(message: Message) -> bool:
-    """
-    Разрешаем команду, если:
-    - Telegram ID в ROLE_MANAGERS
-    - или username в ADMIN_USERNAMES (из env)
-    """
     uid = message.from_user.id
     uname = (message.from_user.username or "").strip().lstrip("@").lower()
     return (uid in ADMIN_IDS) or (uname in ADMIN_USERNAMES)
@@ -104,21 +99,19 @@ dp = Dispatcher()
 _http: Optional[httpx.AsyncClient] = None
 
 
-@dp.startup()
 async def on_startup():
     global _http
     _http = httpx.AsyncClient(timeout=10)
     log.info("Bot started. API=%s", API_V1)
+dp.startup.register(on_startup)
 
-
-@dp.shutdown()
 async def on_shutdown():
     global _http
     if _http:
         await _http.aclose()
         _http = None
     log.info("Bot stopped")
-
+dp.shutdown.register(on_shutdown)
 
 @dp.message(CommandStart())
 async def cmd_start(message: Message):
@@ -145,6 +138,9 @@ async def cmd_start(message: Message):
         reply_markup=kb,
     )
 
+@dp.message(Command("ping"))
+async def cmd_ping(message: Message):
+    await message.answer("pong")
 
 # ---------- /changerole <username> <role> ----------
 @dp.message(Command("changerole"))
@@ -207,6 +203,7 @@ async def do_change_role(message: Message, raw_username: str, raw_role: str):
 
 
 async def main():
+    await bot.delete_webhook(drop_pending_updates=True)
     await dp.start_polling(bot)
 
 
