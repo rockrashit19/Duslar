@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { api } from "../lib/api";
 import { useToast } from "../state/toast";
+import { backButton } from "@telegram-apps/sdk";
 
 type UserPublic = {
   id: number;
@@ -22,6 +23,26 @@ export default function UserProfilePage() {
   const [note, setNote] = useState<string>("");
   const [err, setErr] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    if (backButton.mount.isAvailable()) {
+      backButton.mount();
+    }
+    if (backButton.show.isAvailable()) {
+      backButton.show();
+    }
+
+    let off: (() => void) | undefined;
+    if (backButton.onClick.isAvailable()) {
+      off = backButton.onClick(() => nav(-1));
+    }
+
+    return () => {
+      if (off) off();
+      if (backButton.hide) backButton.hide();
+      if (backButton.unmount) backButton.unmount();
+    };
+  }, [nav]);
 
   useEffect(() => {
     (async () => {

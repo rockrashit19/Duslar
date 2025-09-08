@@ -138,6 +138,27 @@ async def cmd_start(message: Message):
         reply_markup=kb,
     )
 
+@dp.message(Command("count"))
+async def cmd_count(message: Message):
+    if not is_admin(message):
+        await message.answer("⛔ У вас нет прав на эту команду.")
+        return
+
+    token = make_admin_jwt(sub=message.from_user.id)
+    url = f"{API_V1}/admin/users/count"
+    headers = {"Authorization": f"Bearer {token}"}
+
+    try:
+        assert _http is not None
+        resp = await _http.get(url, headers=headers)
+        if resp.status_code == 200:
+            data = resp.json()
+            await message.answer(f"👥 Пользователей в базе: {data.get('count', 0)}")
+        else:
+            await message.answer(f"❌ Ошибка API: {resp.status_code} {resp.text}")
+    except Exception as e:
+        await message.answer(f"❌ Ошибка запроса: {e}")
+
 @dp.message(Command("ping"))
 async def cmd_ping(message: Message):
     await message.answer("pong")
@@ -200,6 +221,8 @@ async def do_change_role(message: Message, raw_username: str, raw_role: str):
             await message.answer(f"❌ Ошибка: {resp.status_code} {resp.text}")
     except Exception as e:
         await message.answer(f"❌ Ошибка запроса: {e}")
+        
+
 
 
 async def main():

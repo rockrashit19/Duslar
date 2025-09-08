@@ -33,3 +33,21 @@ def change_role(username: str, payload: dict, db: Session = Depends(get_db), adm
              user.username, user.id, before, user.role, getattr(admin, "sub", "?"))
 
     return {"id": user.id, "username": user.username, "role": user.role}
+
+from fastapi import APIRouter, Depends, HTTPException
+from sqlalchemy import select, func
+from sqlalchemy.orm import Session
+
+from app.api.deps import get_db
+from app.core.deps import require_admin 
+from app.models import User
+
+admin_router = APIRouter(prefix="/admin", tags=["admin"])
+
+@admin_router.get("/users/count")
+def users_count(
+    db: Session = Depends(get_db),
+    _ = Depends(require_admin), 
+):
+    total = db.scalar(select(func.count()).select_from(User)) or 0
+    return {"count": int(total)}
