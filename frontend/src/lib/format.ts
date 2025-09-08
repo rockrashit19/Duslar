@@ -17,7 +17,7 @@ export function statusLabel(e: {
   participants_count: number;
   max_participants: number | null;
 }) {
-  if (e.status !== "open") return "прошло";
+  if (e.status == "past") return "прошло";
   if (
     e.max_participants != null &&
     e.participants_count >= e.max_participants

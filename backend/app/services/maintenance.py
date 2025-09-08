@@ -8,7 +8,7 @@ from sqlalchemy.orm import Session
 
 from app.db.session import SessionLocal
 from app.models.event import Event, EventStatus
-from app.models.event_participant import EventParticipant
+from app.models.event_participant import EventParticipant, ParticipationStatus
 
 
 def sync_event_statuses(session: Session | None = None) -> int:
@@ -31,7 +31,7 @@ def sync_event_statuses(session: Session | None = None) -> int:
         parts_count = (
             select(func.count())
             .select_from(EventParticipant)
-            .where(EventParticipant.event_id == Event.id)
+            .where(EventParticipant.event_id == Event.id, EventParticipant.status==ParticipationStatus.joined)
             .scalar_subquery()
         )
 
@@ -103,12 +103,13 @@ def recompute_event_status(event_id: int, session: Session | None = None) -> Eve
             cnt = session.scalar(
                 select(func.count())
                 .select_from(EventParticipant)
-                .where(EventParticipant.event_id == ev.id)
+                .where(
+                    EventParticipant.event_id == ev.id,
+                    EventParticipant.status == ParticipationStatus.joined,  # ← добавили фильтр
+                )
             ) or 0
-
-            desired = (
-                EventStatus.closed if cnt >= ev.max_participants else EventStatus.open
-            )
+            desired = EventStatus.closed if cnt >= ev.max_participants else EventStatus.open
+        
             if ev.status != desired:
                 ev.status = desired
                 session.commit()
