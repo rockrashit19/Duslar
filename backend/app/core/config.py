@@ -23,6 +23,7 @@ class Settings(BaseSettings):
     s3_access_key_id: str | None = None
     s3_secret_access_key: str | None = None
     s3_public_base_url: str | None = None
+    swift_public_base_url: str | None = None
 
     role_managers: list[int] = []
 

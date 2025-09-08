@@ -32,6 +32,8 @@ class LocalStorage(Storage):
 class S3Storage(Storage):
     def __init__(self):
         import boto3
+        from app.core.config import settings  
+        
         self.s3 = boto3.client(
             "s3",
             region_name=settings.s3_region,
@@ -41,10 +43,14 @@ class S3Storage(Storage):
         )
         self.bucket = settings.s3_bucket
         self.public_base = settings.s3_public_base_url
+        self.swift_public_base = settings.swift_public_base_url
         
     def save(self, stream: BinaryIO, filename: str, content_type: str | None) -> str:
+        import mimetypes  
+        
         key = self.build_key(filename)
         ct = content_type or (mimetypes.guess_type(filename)[0] or "application/octet-stream")
+        
         try:
             try:
                 stream.seek(0)
@@ -55,18 +61,18 @@ class S3Storage(Storage):
                 Fileobj=stream,
                 Bucket=self.bucket,
                 Key=key,
-                ExtraArgs={
-                    "ContentType": ct,
-                    "ACL": "public-read",
-                    "CacheControl": "public, max-age=31536000, immutable",
-                },
+                ExtraArgs={"ContentType": ct},
             )
         except Exception as e:
             raise
+        
+        if self.swift_public_base:
+            return f"{self.swift_public_base.rstrip('/')}/{key}"
         if self.public_base:
             return f"{self.public_base.rstrip('/')}/{key}"
+        
         base = settings.s3_endpoint_url.rstrip("/") if settings.s3_endpoint_url else f"https://{self.bucket}.s3.{settings.s3_region}.amazonaws.com"
-        return f"{base}/{key}"
+        return f"{base}/{self.bucket}/{key}"
 
 def get_storage() -> Storage:
     if settings.storage_backend == "s3":

@@ -4,10 +4,10 @@ from sqlalchemy import select
 from sqlalchemy.orm import Session
 import logging
 
-from app.api.deps import get_db            # у тебя есть app.core.deps
+from app.api.deps import get_db            
 from app.core.config import settings
-from app.core.deps import require_admin  # твой guard
-from app.models import User               # твоя модель
+from app.core.deps import require_admin  
+from app.models import User               
 
 log = logging.getLogger("admin-users")
 router = APIRouter(prefix="/admin/users", tags=["admin"])
@@ -18,7 +18,6 @@ def change_role(username: str, payload: dict, db: Session = Depends(get_db), adm
     if new_role not in {"user", "organizer", "admin"}:
         raise HTTPException(400, detail="Неправильная роль \n Возможные роли: user, organizer, admin")
 
-    # ищем без учета регистра
     stmt = select(User).where(User.username.ilike(username))
     user = db.execute(stmt).scalar_one_or_none()
     if not user:
