@@ -67,8 +67,8 @@ def upsert_my_note(
     if not other:
         raise HTTPException(404, "user not found")
 
-    if not _met_before(db, current.id, target_user_id):
-        raise HTTPException(403, "no past events together")
+    # if not _met_before(db, current.id, target_user_id):
+    #     raise HTTPException(403, "no past events together")
 
     note = db.execute(
         select(UserNote).where(

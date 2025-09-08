@@ -43,7 +43,8 @@ export function ToastProvider({ children }: { children: React.ReactNode }) {
             key={toast.id}
             style={{
               pointerEvents: "auto",
-              maxWidth: 500, // число, а не строка
+              maxWidth: 500,
+              minWidth: 200,
               padding: "10px 12px",
               borderRadius: 10,
               background:
@@ -60,6 +61,10 @@ export function ToastProvider({ children }: { children: React.ReactNode }) {
                   ? "#bde5c8"
                   : "#e0e0e0"),
               boxShadow: "0 4px 12px rgba(0,0,0,.06)",
+              wordWrap: "break-word",
+              overflowWrap: "break-word",
+              whiteSpace: "pre-wrap",
+              textAlign: "center",
             }}
           >
             {toast.text}

@@ -669,4 +669,14 @@ input[type="time"] {
   transform: translateX(-50%);
   bottom: calc(80px + env(safe-area-inset-bottom, 0px));
   z-index: 2000;
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  max-width: calc(100vw - 40px);
+  pointer-events: none;
+}
+
+.toast > div {
+  width: fit-content;
+  max-width: 100%;
 }
