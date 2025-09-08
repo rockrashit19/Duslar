@@ -1,6 +1,6 @@
 # app/api/v1/admin_users.py (или где у тебя админ-маршруты)
 from fastapi import APIRouter, Depends, HTTPException
-from sqlalchemy import select
+from sqlalchemy import select, func
 from sqlalchemy.orm import Session
 import logging
 
@@ -10,7 +10,7 @@ from app.core.deps import require_admin
 from app.models import User               
 
 log = logging.getLogger("admin-users")
-router = APIRouter(prefix="/admin/users", tags=["admin"])
+router = APIRouter(prefix="/admin", tags=["admin"])
 
 @router.patch("/by-username/{username}/role")
 def change_role(username: str, payload: dict, db: Session = Depends(get_db), admin=Depends(require_admin)):
@@ -34,20 +34,10 @@ def change_role(username: str, payload: dict, db: Session = Depends(get_db), adm
 
     return {"id": user.id, "username": user.username, "role": user.role}
 
-from fastapi import APIRouter, Depends, HTTPException
-from sqlalchemy import select, func
-from sqlalchemy.orm import Session
-
-from app.api.deps import get_db
-from app.core.deps import require_admin 
-from app.models import User
-
-admin_router = APIRouter(prefix="/admin", tags=["admin"])
-
-@admin_router.get("/users/count")
+@router.get("/users/count")
 def users_count(
     db: Session = Depends(get_db),
-    _ = Depends(require_admin), 
+    _ = Depends(require_admin),
 ):
     total = db.scalar(select(func.count()).select_from(User)) or 0
     return {"count": int(total)}

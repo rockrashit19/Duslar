@@ -25,24 +25,20 @@ export default function UserProfilePage() {
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    if (backButton.mount.isAvailable()) {
-      backButton.mount();
-    }
-    if (backButton.show.isAvailable()) {
-      backButton.show();
-    }
+    console.log("TG back supported?", backButton.isSupported());
+    if (backButton.mount.isAvailable()) backButton.mount();
+    if (backButton.show.isAvailable()) backButton.show();
 
-    let off: (() => void) | undefined;
-    if (backButton.onClick.isAvailable()) {
-      off = backButton.onClick(() => nav(-1));
-    }
+    const off = backButton.onClick.isAvailable()
+      ? backButton.onClick(() => window.history.back())
+      : undefined;
 
     return () => {
-      if (off) off();
-      if (backButton.hide) backButton.hide();
-      if (backButton.unmount) backButton.unmount();
+      off?.();
+      backButton.hide?.();
+      backButton.unmount?.();
     };
-  }, [nav]);
+  }, []);
 
   useEffect(() => {
     (async () => {
