@@ -84,7 +84,7 @@ def list_events(
     if df and dt and df > dt:
         raise HTTPException(status_code=400, detail="'from' must be <= 'to'")
 
-    if gender:
+    if gender=='male' or gender=='female':
         conds.append(Event.gender_restriction == gender)
         
     tokens = _query_tokens(q)
