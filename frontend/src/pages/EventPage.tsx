@@ -156,22 +156,23 @@ export default function EventPage() {
             className="event-meta"
             style={{
               marginRight: 50,
-              overflow: "hidden",
-              position: "relative",
+              overflowX: "auto",
+              overflowY: "hidden",
+              whiteSpace: "nowrap",
+              paddingBottom: 8,
+              scrollbarWidth: "none", // Скрыть для Firefox
+              msOverflowStyle: "none", // Скрыть для IE
+              WebkitOverflowScrolling: "touch",
             }}
           >
-            <span
-              title={`${data.city} • ${data.location}`}
-              style={{
-                whiteSpace: "nowrap",
-                overflow: "hidden",
-                textOverflow: "ellipsis",
-                display: "block",
-                cursor: "help",
-              }}
-            >
-              {data.city} • {data.location}
-            </span>
+            {data.city} • {data.location}
+            <style>
+              {`
+                .event-meta::-webkit-scrollbar {
+                display: none;
+                }
+              `}
+            </style>
           </div>
 
           <p style={{ whiteSpace: "pre-wrap", marginTop: 12, marginBottom: 0 }}>
