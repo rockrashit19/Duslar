@@ -1,9 +1,9 @@
 // BottomNav.tsx
 import { NavLink } from "react-router-dom";
-import addIcon from "../assets/add.png";
-import mosqueIcon from "../assets/mosque.png";
-import peopleIcon from "../assets/people.png";
-import personIcon from "../assets/person.png";
+import addIcon from "../assets/add.svg";
+import mosqueIcon from "../assets/mosque.svg";
+import peopleIcon from "../assets/people.svg";
+import personIcon from "../assets/person.svg";
 
 export default function BottomNav() {
   return (

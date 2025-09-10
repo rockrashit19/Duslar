@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import searchIcon from "../assets/search.png";
+import searchIcon from "../assets/search.svg";
 
 export default function SearchBar({
   initial = "",

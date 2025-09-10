@@ -5,10 +5,10 @@ import EventCard from "../components/EventCard";
 import { useToast } from "../state/toast";
 
 // иконки
-import filterIcon from "../assets/filter.png";
-import searchIcon from "../assets/search.png";
-import calendarIcon from "../assets/date.png";
-import polygonIcon from "../assets/polygon.png";
+import filterIcon from "../assets/filter.svg";
+import searchIcon from "../assets/search.svg";
+import calendarIcon from "../assets/date.svg";
+import polygonIcon from "../assets/polygon.svg";
 
 const PAGE = 10;
 

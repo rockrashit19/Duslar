@@ -2,9 +2,9 @@ import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { api } from "../lib/api";
 import { useToast } from "../state/toast";
-import chevronIcon from "../assets/polygon.png";
-import calendarIcon from "../assets/date.png";
-import timeIcon from "../assets/time.png";
+import chevronIcon from "../assets/polygon.svg";
+import calendarIcon from "../assets/date.svg";
+import timeIcon from "../assets/time.svg";
 import { buildLocalDateTime } from "../lib/format";
 
 type Role = "user" | "organizer" | "admin";

@@ -4,8 +4,8 @@ import type { UserMe, EventCardOut } from "../types";
 import EventCard from "../components/EventCard";
 import { useToast } from "../state/toast";
 import { normalizeCyrillic } from "../lib/validate";
-import searchIcon from "../assets/search.png";
-import polygonIcon from "../assets/polygon.png";
+import searchIcon from "../assets/search.svg";
+import polygonIcon from "../assets/polygon.svg";
 import { clip17 } from "../lib/format";
 
 /** Лёгкий debounce без внешних зависимостей */
