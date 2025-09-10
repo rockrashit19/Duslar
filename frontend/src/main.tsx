@@ -10,6 +10,7 @@ import "./styles/reset.css";
 import "./styles/global.css";
 import "./lib/telegram";
 import { initTGSDK } from "./lib/telegram";
+// just to commit one svg file
 // import { applyTelegramTheme, bindThemeListener } from "./lib/telegramTheme";
 
 // applyTelegramTheme();
