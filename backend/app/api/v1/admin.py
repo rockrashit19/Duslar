@@ -10,7 +10,7 @@ from app.core.deps import require_admin
 from app.models import User               
 
 log = logging.getLogger("admin-users")
-router = APIRouter(prefix="/admin", tags=["admin"])
+router = APIRouter(prefix="/admin/users", tags=["admin"])
 
 @router.patch("/by-username/{username}/role")
 def change_role(username: str, payload: dict, db: Session = Depends(get_db), admin=Depends(require_admin)):
@@ -34,7 +34,7 @@ def change_role(username: str, payload: dict, db: Session = Depends(get_db), adm
 
     return {"id": user.id, "username": user.username, "role": user.role}
 
-@router.get("/users/count")
+@router.get("/count")
 def users_count(
     db: Session = Depends(get_db),
     _ = Depends(require_admin),
