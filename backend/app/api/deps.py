@@ -23,7 +23,7 @@ def assert_can_manage_roles(current: User) -> None:
 
 def get_current_user(
     authorization: Optional[str] = Header(default=None),
-    db: Session = Depends(get_db),
+    db: Session = Depends(get_db), # type: ignore
 ) -> User:
     if not authorization or not authorization.lower().startswith("bearer "):
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="missing bearer token")
