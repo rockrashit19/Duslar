@@ -43,7 +43,7 @@ export default function EventCard({
       className="event_card"
       style={{
         display: "grid",
-        gridTemplateRows: "auto 1fr", // Две строки: контент и кнопки
+        gridTemplateRows: "auto 1fr",
         padding: 10,
         borderRadius: 10,
         background: "var(--bg-soft)",
@@ -51,7 +51,6 @@ export default function EventCard({
         overflow: "hidden",
       }}
     >
-      {/* Верхняя часть с контентом */}
       <div
         style={{
           display: "grid",
@@ -60,7 +59,6 @@ export default function EventCard({
           minWidth: 0,
         }}
       >
-        {/* Фото (без изменений) */}
         <div
           style={{
             width: 100,
@@ -90,14 +88,12 @@ export default function EventCard({
           )}
         </div>
 
-        {/* Контент */}
         <div
           style={{
             display: "grid",
             minWidth: 0,
           }}
         >
-          {/* Заголовок с переносом */}
           <div
             style={{
               paddingTop: 5,
@@ -111,7 +107,6 @@ export default function EventCard({
             {event.title}
           </div>
 
-          {/* Метаданные с прокруткой */}
           <div
             className="meta"
             style={{
@@ -163,7 +158,6 @@ export default function EventCard({
         </div>
       </div>
 
-      {/* Нижняя часть с кнопками - занимает всю ширину */}
       <div
         style={{
           display: "grid",
@@ -180,7 +174,7 @@ export default function EventCard({
               onClick={doJoin}
               style={{
                 ...chipStylePrimary,
-                width: "100%", // Занимает всю ширину колонки
+                width: "100%",
               }}
             >
               Запись
@@ -189,7 +183,7 @@ export default function EventCard({
               <button
                 style={{
                   ...chipStyleSecondary,
-                  width: "100%", // Занимает всю ширину колонки
+                  width: "100%",
                 }}
               >
                 Подробнее
@@ -201,7 +195,7 @@ export default function EventCard({
             to={`/events/${event.id}`}
             style={{
               textDecoration: "none",
-              gridColumn: "span 2", // Занимает обе колонки
+              gridColumn: "span 2",
             }}
           >
             <button

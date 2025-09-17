@@ -16,40 +16,31 @@ from aiogram.types import (
     WebAppInfo,
 )
 
-# ===== Настройки из вашего проекта =====
-from app.core.config import settings  # <- читает .env через pydantic-settings
+from app.core.config import settings  
 
-# ---------- базовая настройка логов ----------
 logging.basicConfig(
     level=logging.INFO,
     format="%(levelname)s:%(name)s:%(message)s",
 )
 log = logging.getLogger("duslar-bot")
 
-# ---------- константы / окружение ----------
 BOT_TOKEN = settings.telegram_bot_token.get_secret_value()
 
-# Базовый URL API (без /api/v1 в .env)
 API_BASE = (settings.backend_base_url or "").rstrip("/")
 if not API_BASE:
     raise RuntimeError("BACKEND_BASE_URL is not set")
 API_V1 = f"{API_BASE}/api/v1"
 
-# Админские ники из окружения (опционально, через запятую)
-# пример: ADMIN_USERNAMES="alice,bob,@Charlie"
 ADMIN_USERNAMES = {
     u.strip().lstrip("@").lower()
     for u in os.getenv("ADMIN_USERNAMES", "").split(",")
     if u.strip()
 }
 
-# Админские Telegram ID из .env -> ROLE_MANAGERS (ваш Settings уже это парсит)
 ADMIN_IDS = set(settings.role_managers or [])
 
-# Разрешённые роли (подставьте свои, если отличаются)
 ALLOWED_ROLES = {"user", "organizer", "admin"}
 
-# JWT параметры — должны соответствовать вашему декодеру на бэкенде
 JWT_SECRET = settings.jwt_secret.get_secret_value()
 JWT_ISSUER = os.getenv("JWT_ISSUER", "duslar-bot")
 JWT_AUDIENCE = os.getenv("JWT_AUDIENCE", "admin")
@@ -58,7 +49,7 @@ JWT_TTL_DAYS = int(os.getenv("JWT_TTL_DAYS", "14"))
 
 def make_admin_jwt(sub: str) -> str:
     """
-    Выпускаем админ-JWT, который пройдёт через ваш require_admin.
+    Выпускаем админ-JWT, который пройдёт через require_admin.
     Поля: sub, role=admin, iss, aud, iat, exp.
     """
     now = datetime.now(timezone.utc)
@@ -91,11 +82,9 @@ def validate_role(raw: str) -> str:
     return role
 
 
-# ---------- aiogram ----------
 bot = Bot(BOT_TOKEN)
 dp = Dispatcher()
 
-# общий HTTP клиент (закрываем при остановке)
 _http: Optional[httpx.AsyncClient] = None
 
 
@@ -117,7 +106,6 @@ dp.shutdown.register(on_shutdown)
 async def cmd_start(message: Message):
     app_url = str(settings.frontend_url or "").rstrip("/")
     if app_url:
-        # Кнопка, открывающая MiniApp (WebAppInfo) — работает внутри Telegram
         kb = InlineKeyboardMarkup(
             inline_keyboard=[
                 [
@@ -129,7 +117,6 @@ async def cmd_start(message: Message):
             ]
         )
     else:
-        # Фоллбек — просто текст без кнопки
         kb = None
 
     await message.answer(
@@ -163,7 +150,6 @@ async def cmd_count(message: Message):
 async def cmd_ping(message: Message):
     await message.answer("pong")
 
-# ---------- /changerole <username> <role> ----------
 @dp.message(Command("changerole"))
 async def changerole_spaces(message: Message):
     if not is_admin(message):
@@ -179,7 +165,6 @@ async def changerole_spaces(message: Message):
     await do_change_role(message, raw_user, raw_role)
 
 
-# ---------- /changerole/<username>/<role> ----------
 @dp.message(F.text.regexp(r"^/changerole/([^/\s]+)/([^/\s]+)$"))
 async def changerole_slashes(message: Message):
     if not is_admin(message):

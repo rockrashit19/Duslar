@@ -1,4 +1,3 @@
-// src/pages/EventPage.tsx
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { api } from "../lib/api";
@@ -126,7 +125,6 @@ export default function EventPage() {
           }}
         >
           <div className="pills" style={{ marginTop: "7px" }}>
-            {/* Плашка пола — центрируем содержимое */}
             <span
               className="pill"
               style={{
@@ -160,8 +158,8 @@ export default function EventPage() {
               overflowY: "hidden",
               whiteSpace: "nowrap",
               paddingBottom: 8,
-              scrollbarWidth: "none", // Скрыть для Firefox
-              msOverflowStyle: "none", // Скрыть для IE
+              scrollbarWidth: "none",
+              msOverflowStyle: "none",
               WebkitOverflowScrolling: "touch",
             }}
           >
@@ -185,7 +183,7 @@ export default function EventPage() {
               alignItems: "center",
               gap: 8,
               marginTop: 16,
-              position: "relative", // Добавляем относительное позиционирование
+              position: "relative",
             }}
           >
             <div style={{ width: "fit-content" }}>
@@ -211,8 +209,8 @@ export default function EventPage() {
             <div
               className="meta"
               style={{
-                position: "absolute", // Абсолютное позиционирование
-                right: 0, // Фиксируем у правого края
+                position: "absolute",
+                right: 0,
                 whiteSpace: "nowrap",
                 fontSize: 14,
                 opacity: 0.85,
@@ -223,7 +221,6 @@ export default function EventPage() {
             </div>
           </div>
 
-          {/* Тоньше линия: 1px высотой */}
           <hr
             style={{
               height: 1,
@@ -246,8 +243,6 @@ export default function EventPage() {
     </div>
   );
 }
-
-/* ---------- Участники ---------- */
 
 function Participants({
   eventId,

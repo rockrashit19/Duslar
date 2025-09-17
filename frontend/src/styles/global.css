@@ -21,7 +21,6 @@ body {
 }
 
 :root {
-  /* твои базовые цвета/шрифты */
   --bg: #f3efe6;
   --bg-elev: #ffffff;
   --bg-soft: #efebdf;
@@ -255,7 +254,6 @@ select {
   pointer-events: none;
 }
 
-/* Фильтры для контролов */
 .field--icon > .input,
 .field--icon > .select,
 .field--icon > input[type="date"],
@@ -292,7 +290,6 @@ select {
   opacity: 0;
 }
 
-/* Специфичные стили для компонента FiltersBar */
 .filters-container {
   display: grid;
   gap: 8px;
@@ -460,7 +457,7 @@ select {
 }
 
 .history {
-  margin: 2rem 20px 0 20px; /* одинаковые боковые отступы с ProfilePage */
+  margin: 2rem 20px 0 20px;
 }
 
 .history__title,
@@ -472,8 +469,8 @@ select {
 
 .history__list {
   display: grid;
-  row-gap: 1rem; /* расстояние между пользователями */
-  margin-top: 1.5rem; /* как в ProfilePage между заголовком и аватаркой */
+  row-gap: 1rem;
+  margin-top: 1.5rem;
 }
 
 .hrow {
@@ -510,7 +507,6 @@ select {
   color: #0b2943b3;
 }
 
-/* Профиль друга */
 .friend-avatar {
   width: 69px;
   height: 69px;
@@ -551,15 +547,13 @@ input[type="time"] {
   -moz-appearance: none;
 }
 
-/* плейсхолдер поиска: 1rem, 500 */
 .search-input::placeholder {
   font-size: 1rem;
   font-weight: 500;
 }
 
-/* убрать нативные иконки у date (мы рисуем свои) */
 .no-native-picker::-webkit-calendar-picker-indicator {
-  opacity: 0; /* скрыть пикерную иконку */
+  opacity: 0;
   display: none;
 }
 .no-native-picker::-webkit-inner-spin-button,
@@ -567,7 +561,6 @@ input[type="time"] {
   display: none;
 }
 
-/* .field--icon уже есть у тебя, но на всякий — иконка справа по центру */
 .field--icon {
   position: relative;
   display: inline-block;
@@ -588,7 +581,6 @@ input[type="time"] {
   padding-right: 88px;
 }
 
-/* ===== EventPage (карточка события, плашки) ===== */
 .event-wrap {
   margin: 0 20px;
 }
@@ -603,7 +595,7 @@ input[type="time"] {
 
 .event-card {
   margin-top: 12px;
-  background: var(--bg-soft); /* #efebdf по твоей теме */
+  background: var(--bg-soft);
   /* border: 1px solid var(--border); */
   border-radius: 12px;
   padding: 12px;
@@ -634,7 +626,6 @@ input[type="time"] {
   height: 25px;
 }
 
-/* заголовок и мета как на макете */
 .event-title {
   font-weight: 500;
   font-size: 1.25rem;
@@ -645,7 +636,6 @@ input[type="time"] {
   opacity: 0.7;
 }
 
-/* блок кнопки + «Мест:» с разделительной линией снизу */
 .event-cta {
   display: grid;
   grid-template-columns: 1fr auto;
@@ -656,7 +646,6 @@ input[type="time"] {
   padding-bottom: 8px;
 }
 
-/* список участников ниже */
 .participants {
   margin-top: 12px;
   display: grid;
@@ -681,7 +670,6 @@ input[type="time"] {
   max-width: 100%;
 }
 
-/* Скрыть скроллбар для Webkit-браузеров (Chrome, Safari) */
 .meta::-webkit-scrollbar {
   display: none;
   width: 0;
@@ -689,17 +677,14 @@ input[type="time"] {
   background: transparent;
 }
 
-/* Скрыть скроллбар для Firefox */
 .meta {
   scrollbar-width: none;
 }
 
-/* Скрыть скроллбар для IE/Edge */
 .meta {
   -ms-overflow-style: none;
 }
 
-/* Убедиться, что все скроллбары скрыты */
 .meta::-webkit-scrollbar-track,
 .meta::-webkit-scrollbar-thumb,
 .meta::-webkit-scrollbar-button,

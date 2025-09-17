@@ -4,7 +4,6 @@ import type { EventCardOut } from "../types";
 import EventCard from "../components/EventCard";
 import { useToast } from "../state/toast";
 
-// иконки
 import filterIcon from "../assets/filter.svg";
 import searchIcon from "../assets/search.svg";
 import calendarIcon from "../assets/date.svg";
@@ -40,7 +39,6 @@ export default function EventsPage() {
   const [filters, setFilters] = useState<Filters>({});
   const [offset, setOffset] = useState(0);
 
-  // debounce поиска -> filters.q
   useEffect(() => {
     const id = setTimeout(() => {
       setOffset(0);
@@ -83,14 +81,11 @@ export default function EventsPage() {
     }
   };
 
-  // первичная загрузка + при изменении фильтров
   useEffect(() => {
     setOffset(0);
     load(true, 0);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [params.city, params.from, params.to, params.gender, params.q]);
 
-  // локальные контролы фильтра
   const [city, setCity] = useState("");
   const [gender, setGender] = useState<"male" | "female" | "all">("all");
   const [from, setFrom] = useState("");
@@ -124,7 +119,6 @@ export default function EventsPage() {
 
   return (
     <div className="app" style={{ paddingLeft: 20, paddingRight: 20 }}>
-      {/* строка поиска + кнопка фильтра */}
       <div
         style={{
           marginTop: "2rem",
@@ -134,7 +128,6 @@ export default function EventsPage() {
           columnGap: 8,
         }}
       >
-        {/* ТОЛЬКО SearchBar: высота 40, r=10, без внешних рамок */}
         <div style={{ width: "100%" }}>
           <div
             className="field--icon"
@@ -164,7 +157,6 @@ export default function EventsPage() {
           </div>
         </div>
 
-        {/* Кнопка фильтров: без обводок, только PNG 30x15 */}
         <button
           aria-label="Фильтры"
           onClick={() => setShowFilters((v) => !v)}
@@ -186,7 +178,6 @@ export default function EventsPage() {
         </button>
       </div>
 
-      {/* ПАНЕЛЬ ФИЛЬТРОВ */}
       {showFilters && (
         <div
           style={{
@@ -197,7 +188,6 @@ export default function EventsPage() {
             border: "1px solid var(--border)",
           }}
         >
-          {/* Город */}
           <RowLine
             label="Город:"
             control={
@@ -219,7 +209,6 @@ export default function EventsPage() {
             }
           />
 
-          {/* Для */}
           <RowLine
             label="Для:"
             control={
@@ -249,7 +238,6 @@ export default function EventsPage() {
             }
           />
 
-          {/* Дата от */}
           <RowLine
             label="Дата от:"
             control={
@@ -271,7 +259,6 @@ export default function EventsPage() {
             }
           />
 
-          {/* Дата до */}
           <RowLine
             label="Дата до:"
             control={
@@ -293,7 +280,6 @@ export default function EventsPage() {
             }
           />
 
-          {/* Кнопки в одну строку, одинаковый фон 30%, r=20 */}
           <div
             style={{
               display: "grid",
@@ -332,7 +318,6 @@ export default function EventsPage() {
         </div>
       )}
 
-      {/* ошибка */}
       {err && (
         <div
           style={{
@@ -347,7 +332,6 @@ export default function EventsPage() {
         </div>
       )}
 
-      {/* список карточек */}
       <div style={{ display: "grid", gap: 10, marginTop: 12 }}>
         {rows?.map((e) => (
           <EventCard

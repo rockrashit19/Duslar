@@ -1,4 +1,3 @@
-# scripts/mock_init_data.py
 import os, json, time, hashlib, hmac
 from urllib.parse import quote_plus
 
@@ -16,7 +15,6 @@ def build_init_data(user: dict, auth_date: int) -> str:
     user_json = json.dumps(user, separators=(",", ":"), ensure_ascii=False)
 
     # 2) Строим data_check_string по ДЕКОДИРОВАННЫМ значениям
-    #    (как у тебя на бэке после parse_qsl)
     pairs_for_dcs = [("auth_date", str(auth_date)), ("user", user_json)]
     dcs = "\n".join(f"{k}={v}" for k, v in sorted(pairs_for_dcs, key=lambda kv: kv[0]))
 

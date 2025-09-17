@@ -43,11 +43,6 @@ TOKEN="$(curl -s -H 'Content-Type: application/json' --data "$BODY" \
   http://127.0.0.1:8000/api/v1/auth/telegram/init | jq -r '.token')"
 ```
 
-Исправить в проде:
-
-- main.py:
-- - allow_origins=origins or ["*"], #обязательно оставить только разрешенные домены
-
 Проверка фильтров событий: docs/filters.md
 
 .env (prod)

@@ -42,11 +42,9 @@ export default function CreateEventPage() {
     );
   }
 
-  // ВАЖНО: порядок хуков здесь больше не меняется — ниже только условный рендер разных ДЕТЕЙ
   return role === "user" ? <CreateEventDenied /> : <CreateEventForm />;
 }
 
-/** Экран-заглушка для обычных пользователей */
 function CreateEventDenied() {
   return (
     <div className="app" style={{ padding: 16 }}>
@@ -90,7 +88,6 @@ function CreateEventDenied() {
   );
 }
 
-/** Форма доступна organizer/admin */
 function CreateEventForm() {
   const nav = useNavigate();
   const { show } = useToast();
@@ -108,7 +105,6 @@ function CreateEventForm() {
   });
   const [busy, setBusy] = useState(false);
 
-  // файл/превью
   const [fileName, setFileName] = useState<string>("");
   const [preview, setPreview] = useState<string | null>(null);
   const hiddenFileRef = useRef<HTMLInputElement | null>(null);
@@ -207,7 +203,6 @@ function CreateEventForm() {
 
       <div style={{ margin: "0 20px" }}>
         <div className="filter">
-          {/* Название */}
           <label className="col" style={{ gap: 6, marginTop: 16 }}>
             <span
               className="meta"
@@ -224,7 +219,6 @@ function CreateEventForm() {
             />
           </label>
 
-          {/* Описание */}
           <label className="col" style={{ gap: 6, marginTop: 16 }}>
             <span
               className="meta"
@@ -241,7 +235,6 @@ function CreateEventForm() {
             />
           </label>
 
-          {/* Город */}
           <label className="col" style={{ gap: 6, marginTop: 16 }}>
             <span
               className="meta"
@@ -256,7 +249,6 @@ function CreateEventForm() {
             />
           </label>
 
-          {/* Точный адрес */}
           <label className="col" style={{ gap: 6, marginTop: 16 }}>
             <span
               className="meta"
@@ -273,7 +265,6 @@ function CreateEventForm() {
             />
           </label>
 
-          {/* Количество участников (опц.) */}
           <label className="col" style={{ gap: 6, marginTop: 16 }}>
             <span
               className="meta"
@@ -297,8 +288,6 @@ function CreateEventForm() {
               }
             />
           </label>
-
-          {/* Дата */}
 
           <label className="col" style={{ gap: 6, marginTop: 16 }}>
             <span
@@ -324,7 +313,6 @@ function CreateEventForm() {
             </div>
           </label>
 
-          {/* Время */}
           <label className="col" style={{ gap: 6, marginTop: 16 }}>
             <span
               className="meta"
@@ -350,7 +338,6 @@ function CreateEventForm() {
             </div>
           </label>
 
-          {/* Для кого */}
           <label className="col" style={{ gap: 6, marginTop: 16 }}>
             <span
               className="meta"
@@ -382,7 +369,6 @@ function CreateEventForm() {
             </div>
           </label>
 
-          {/* Фото (опционально) */}
           <div style={{ marginTop: 16 }}>
             <div
               style={{
@@ -476,7 +462,6 @@ function CreateEventForm() {
           </div>
         </div>
 
-        {/* Создать */}
         <div style={{ marginTop: 20 }}>
           <button
             disabled={!canSubmit}

@@ -49,7 +49,7 @@ def my_people_history(
                 ep1.user_id == current.id,
                 ep1.status == ParticipationStatus.joined,
                 ep2.status == ParticipationStatus.joined,
-                Event.date_time < _now_utc(),  # только прошедшие
+                Event.date_time < _now_utc(),  
                 ep1.is_visible == True,
                 ep2.is_visible == True,
             )

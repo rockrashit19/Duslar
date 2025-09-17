@@ -28,11 +28,9 @@ export function statusLabel(e: {
 }
 
 export function dateStartZ(dateYYYYMMDD: string) {
-  // "2025-08-25" -> "2025-08-25T00:00:00Z"
   return `${dateYYYYMMDD}T00:00:00Z`;
 }
 export function dateEndZ(dateYYYYMMDD: string) {
-  // "2025-08-25" -> "2025-08-25T23:59:59Z"
   return `${dateYYYYMMDD}T23:59:59Z`;
 }
 

@@ -194,7 +194,6 @@ def update_role(
     if not target:
         raise HTTPException(status_code=404, detail="user not found")
 
-    # Полезное правило: не давать «не-админам» поднимать кого-то в admin
     if current.role != UserRole.admin and payload.role == "admin":
         raise HTTPException(status_code=403, detail="only admin can assign admin")
 

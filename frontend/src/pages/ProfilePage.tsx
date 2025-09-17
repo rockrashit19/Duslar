@@ -8,10 +8,8 @@ import searchIcon from "../assets/search.svg";
 import polygonIcon from "../assets/polygon.svg";
 import { clip17 } from "../lib/format";
 
-/** Лёгкий debounce без внешних зависимостей */
 function useDebounce<T extends (...args: any[]) => any>(fn: T, ms: number) {
   const t = useRef<number | undefined>(undefined);
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   return (...args: Parameters<T>) => {
     if (t.current) window.clearTimeout(t.current);
     t.current = window.setTimeout(() => fn(...args), ms);
@@ -24,7 +22,6 @@ export default function ProfilePage() {
   const [me, setMe] = useState<UserMe | null>(null);
   const [err, setErr] = useState<string | null>(null);
 
-  // Локальные поля формы
   const [city, setCity] = useState("");
   const [gender, setGender] = useState<"male" | "female" | "unknown">(
     "unknown"
@@ -32,10 +29,8 @@ export default function ProfilePage() {
   const [savingCity, setSavingCity] = useState(false);
   const [savingGender, setSavingGender] = useState(false);
 
-  // История моих событий
   const [rows, setRows] = useState<EventCardOut[]>([]);
 
-  // Стартовая загрузка профиля и записей
   useEffect(() => {
     (async () => {
       try {
@@ -58,10 +53,8 @@ export default function ProfilePage() {
     })();
   }, [show]);
 
-  // Картинка аватара (или fallback-буква)
   const avatarSrc = useMemo(() => me?.avatar_url || undefined, [me]);
 
-  // --- Сохранение города (debounced) ---
   const saveCity = async (value: string) => {
     setSavingCity(true);
     try {
@@ -83,7 +76,6 @@ export default function ProfilePage() {
   };
   const onCityBlur = () => saveCity(city);
 
-  // --- Сохранение пола ---
   const onGenderChange = async (v: "male" | "female" | "unknown") => {
     setGender(v);
     setSavingGender(true);
@@ -98,12 +90,10 @@ export default function ProfilePage() {
     }
   };
 
-  // Патч карточки события после действий в дочерних компонентах
   const patchEvent = (next: EventCardOut) => {
     setRows((prev) => prev.map((r) => (r.id === next.id ? next : r)));
   };
 
-  // Состояния загрузки/ошибок
   if (err)
     return (
       <div className="app" style={{ padding: 16 }}>
@@ -119,12 +109,9 @@ export default function ProfilePage() {
 
   return (
     <div className="app">
-      {/* Заголовок страницы */}
       <h1 style={{ margin: "2rem 0 0 20px" }}>Мой профиль</h1>
 
-      {/* Контейнер содержимого */}
       <div style={{ marginLeft: 20, marginRight: 20 }}>
-        {/* Шапка профиля */}
         <section style={{ marginTop: "1.5rem" }}>
           <div
             className="grid"
@@ -137,7 +124,6 @@ export default function ProfilePage() {
               maxWidth: 320,
             }}
           >
-            {/* Аватар */}
             <div style={{ gridRow: 1, gridColumn: 1 }}>
               <div
                 style={{
@@ -177,7 +163,6 @@ export default function ProfilePage() {
               </div>
             </div>
 
-            {/* Имя + мета */}
             <div style={{ gridRow: 1, gridColumn: 2 }}>
               <h2 style={{ margin: "10px 0 3px 0" }}>{me.full_name}</h2>
               <div className="meta">@{clip17(me.username || "—")}</div>
@@ -185,7 +170,6 @@ export default function ProfilePage() {
               <div className="meta">Роль: {me.role || "user"}</div>
             </div>
 
-            {/* Поле «Город» */}
             <div style={{ gridRow: 2, gridColumn: "1 / span 2" }}>
               <div className="meta" style={{ marginBottom: 4 }}>
                 Город
@@ -212,7 +196,6 @@ export default function ProfilePage() {
               )}
             </div>
 
-            {/* Поле «Пол» */}
             <div style={{ gridRow: 3, gridColumn: "1 / span 2" }}>
               <div className="meta" style={{ marginBottom: 4 }}>
                 Мой пол

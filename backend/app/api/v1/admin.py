@@ -1,4 +1,3 @@
-# app/api/v1/admin_users.py (или где у тебя админ-маршруты)
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy import select, func
 from sqlalchemy.orm import Session

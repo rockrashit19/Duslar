@@ -21,7 +21,6 @@ target_metadata = Base.metadata
 
 
 def _get_db_url() -> str:
-    # приоритет: -x DATABASE_URL=... > ENV > alembic.ini
     xargs = context.get_x_argument(as_dictionary=True)
     return xargs.get("DATABASE_URL") \
         or os.getenv("DATABASE_URL") \
@@ -29,7 +28,7 @@ def _get_db_url() -> str:
 
 def include_object(obj, name, type_, reflected, compare_to):
     if type_ == "index":
-        return False  # игнорировать индексы при --autogenerate
+        return False  
     return True
 
 def run_migrations_offline() -> None:
@@ -47,7 +46,6 @@ def run_migrations_offline() -> None:
 
 def run_migrations_online() -> None:
     url = _get_db_url()
-    # подставим URL в конфиг перед созданием engine
     config.set_main_option("sqlalchemy.url", url)
 
     connectable = engine_from_config(

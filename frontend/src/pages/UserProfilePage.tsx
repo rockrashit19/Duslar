@@ -114,12 +114,9 @@ export default function UserProfilePage() {
 
   return (
     <div className="app">
-      {/* Имя как заголовок страницы — как в ProfilePage */}
       <h1 style={{ margin: "2rem 0 0 20px" }}>{data.full_name}</h1>
 
-      {/* Контент с боковыми 20px — как в ProfilePage */}
       <div style={{ margin: "0 20px" }}>
-        {/* Шапка как в ProfilePage: аватар 100x100 слева, текст справа */}
         <div
           style={{
             display: "grid",
@@ -187,7 +184,6 @@ export default function UserProfilePage() {
           </div>
         </div>
 
-        {/* Личная заметка */}
         <h3
           style={{
             marginTop: 20,
@@ -213,7 +209,6 @@ export default function UserProfilePage() {
           }}
         />
 
-        {/* Кнопки: две колонки, каждая на всю ширину, gap 1.25rem */}
         <div
           style={{
             display: "grid",

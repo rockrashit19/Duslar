@@ -75,7 +75,6 @@ function HistoryRow({ row, onOpen }: { row: Row; onOpen: () => void }) {
 
   return (
     <div className="hrow" onClick={onOpen} role="button">
-      {/* фото */}
       <div className="hrow__avatar">
         {row.avatar_url ? (
           <img
@@ -90,7 +89,6 @@ function HistoryRow({ row, onOpen }: { row: Row; onOpen: () => void }) {
         )}
       </div>
 
-      {/* текст (имя + мета) */}
       <div>
         <div className="hrow__name">{row.full_name}</div>
         <div className="hrow__meta">

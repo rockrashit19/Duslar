@@ -28,5 +28,5 @@ __all__ = [
     "ParticipantOut",
     "GenderUpdateIn",
     "UserGender",
-    "PersonHistoryOut",
+    "PeopleHistoryItemOut",
 ]
